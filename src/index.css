@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-navy-darkest: #FAFAFD; /* Luminous cool indigo-slate base bg */
+  --color-navy-dark: #FFFFFF;    /* Clean white cards */
+  --color-navy-light: #E2E8F0;   /* Slate borders */
+  --color-navy-lightest: #F1F5F9;/* Hover slate */
+
+  --color-electric: #2563EB;     /* Vibrant Royal Blue (Primary Brand Color) */
+  --color-electric-hover: #1D4ED8;
+  --color-electric-blue: #0EA5E9; /* Vivid Cyan-Blue accent */
+  --color-electric-indigo: #6366F1; /* Radiant Indigo accent */
+  --color-safety-orange: #F97316; /* Safety Orange for industrial active tracking */
+  --color-safety-orange-hover: #EA580C;
+
+  --color-slate-primary: #0F172A;   /* Deep Charcoal for high-contrast reading */
+  --color-slate-secondary: #334155; /* Slate-Blue for detailed subtext */
+  --color-slate-muted: #64748B;     /* Subdued metadata */
+
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+  --font-display: 'Outfit', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --animate-ping-slow: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  --animate-grid-pulse: grid-pulse 8s ease-in-out infinite;
+  --animate-scan: scan 3s linear infinite;
+  --animate-pulse-subtle: pulse-subtle 3s infinite ease-in-out;
+  --animate-sync-spin: spin 3s linear infinite;
+  --animate-data-stream: data-stream 1.5s linear infinite;
+
+  @keyframes grid-pulse {
+    0%, 100% { opacity: 0.15 }
+    50% { opacity: 0.35 }
+  }
+  @keyframes scan {
+    0% { transform: translateY(-100%) }
+    100% { transform: translateY(100%) }
+  }
+  @keyframes pulse-subtle {
+    0%, 100% { opacity: 0.9; transform: scale(1) }
+    50% { opacity: 1; transform: scale(1.01) }
+  }
+  @keyframes data-stream {
+    0% { transform: translateX(-100%) }
+    100% { transform: translateX(100%) }
+  }
+
+  --shadow-neon-teal: 0 4px 20px rgba(14, 165, 233, 0.12);
+  --shadow-neon-teal-intense: 0 4px 25px rgba(37, 99, 235, 0.22);
+  --shadow-neon-blue: 0 4px 20px rgba(14, 165, 233, 0.12);
+  --shadow-neon-orange: 0 4px 20px rgba(249, 115, 22, 0.2);
+  --shadow-cyber-card: 0 20px 40px -15px rgba(37, 99, 235, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+@utility grid-pattern {
+  background-image: radial-gradient(circle, rgba(99, 102, 241, 0.06) 1px, transparent 1px);
+}
+@utility cyber-gradient {
+  background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 250, 253, 0.98) 100%);
+}
