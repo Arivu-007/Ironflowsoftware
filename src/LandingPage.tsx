@@ -329,7 +329,7 @@ export default function LandingPage() {
             <Icons.Logo />
             <div className="flex flex-col">
               <span className="font-display font-bold text-2xl tracking-tight text-slate-primary">IronFlow</span>
-              <span className="text-[9px] font-mono tracking-widest text-electric font-bold uppercase -mt-0.5">RFID SYSTEMS</span>
+              <span className="text-[9px] font-mono tracking-widest text-electric font-bold uppercase -mt-0.5">SOFTWARES</span>
             </div>
           </div>
 
@@ -1162,7 +1162,7 @@ export default function LandingPage() {
             <div className="flex flex-col items-center md:items-start space-y-2">
               <div className="flex items-center space-x-2">
                 <Icons.Logo />
-                <span className="font-display font-bold text-lg tracking-wider text-slate-primary">IronFlow Systems</span>
+                <span className="font-display font-bold text-lg tracking-wider text-slate-primary">IronFlow Softwares</span>
               </div>
               <p className="text-slate-secondary text-center md:text-left mt-1">
                 © {new Date().getFullYear()} IronFlow Software, Inc. All rights reserved. Deployed via Edge Core.
