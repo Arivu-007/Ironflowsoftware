@@ -1467,14 +1467,14 @@ export default function LandingPage() {
                   <div className="bg-blue-50 text-electric border border-blue-100 p-2 rounded shadow-sm">
                     <Icons.Mail className="w-4 h-4" />
                   </div>
-                  <a href="mailto:info@ironflowsoftwares.com" className="font-bold font-mono">info@ironflowsoftwares.com</a>
+                  <a href="mailto:info@ironflowsoftware.com" className="font-bold font-mono">info@ironflowsoftware.com</a>
                 </div>
 
                 <div className="flex items-center space-x-3 text-slate-secondary hover:text-electric transition-colors">
                   <div className="bg-blue-50 text-electric border border-blue-100 p-2 rounded shadow-sm">
                     <Icons.Globe className="w-4 h-4" />
                   </div>
-                  <a href="https://www.ironflowsoftwares.com" target="_blank" rel="noopener noreferrer" className="font-bold font-mono">www.ironflowsoftwares.com</a>
+                  <a href="https://www.ironflowsoftware.com" target="_blank" rel="noopener noreferrer" className="font-bold font-mono">www.ironflowsoftware.com</a>
                 </div>
               </div>
 
