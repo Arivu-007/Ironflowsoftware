@@ -725,21 +725,21 @@ export default function LandingPage() {
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-safety-orange"></span>
                     </span>
-                    <span className="font-mono text-xs font-bold text-slate-primary uppercase">
+                    <span className="font-display text-sm sm:text-base font-extrabold text-slate-primary uppercase tracking-wide">
                       {activePillar === 'asset' && 'Pillar 1: Interactive Asset Hub'}
                       {activePillar === 'work_order' && 'Pillar 2: Interactive Dispatch Board'}
                       {activePillar === 'preventive' && 'Pillar 3: PM Scheduler Simulator'}
                       {activePillar === 'reports' && 'Pillar 4: Real-time ROI & Uptime Calculator'}
                     </span>
                   </div>
-                  <span className="text-[10px] font-mono text-slate-muted uppercase tracking-wider">LIVE TELEMETRY VIEW</span>
+                  <span className="text-xs font-mono font-bold text-safety-orange uppercase tracking-wider">LIVE TELEMETRY VIEW</span>
                 </div>
 
                 {/* 1. ASSET MANAGEMENT SIMULATOR */}
                 {activePillar === 'asset' && (
                   <div className="space-y-6 flex-1 flex flex-col justify-between">
                     <div>
-                      <p className="text-xs text-slate-secondary mb-4 leading-relaxed">
+                      <p className="text-sm sm:text-base text-slate-secondary mb-6 leading-relaxed">
                         Tap on a high-value asset inside the telemetry queue to verify hierarchy tree logs, warranty files, and database records in real-time.
                       </p>
                       
@@ -807,7 +807,7 @@ export default function LandingPage() {
                 {activePillar === 'work_order' && (
                   <div className="space-y-6 flex-1 flex flex-col justify-between">
                     <div>
-                      <p className="text-xs text-slate-secondary mb-4 leading-relaxed">
+                      <p className="text-sm sm:text-base text-slate-secondary mb-6 leading-relaxed">
                         Track status flows from Open to Closed in real-time. Tap column cards to cycle this simulated Preventive Work Order (WO-2941) through technician workflows.
                       </p>
 
@@ -883,7 +883,7 @@ export default function LandingPage() {
                 {activePillar === 'preventive' && (
                   <div className="space-y-6 flex-1 flex flex-col justify-between">
                     <div>
-                      <p className="text-xs text-slate-secondary mb-4 leading-relaxed">
+                      <p className="text-sm sm:text-base text-slate-secondary mb-6 leading-relaxed">
                         Set automated preventive intervals below. IronFlow automatically dispatches a secure work order and safety checklists as soon as the scheduled interval is reached.
                       </p>
 
@@ -956,7 +956,7 @@ export default function LandingPage() {
                 {activePillar === 'reports' && (
                   <div className="space-y-6 flex-1 flex flex-col justify-between">
                     <div>
-                      <p className="text-xs text-slate-secondary mb-4 leading-relaxed">
+                      <p className="text-sm sm:text-base text-slate-secondary mb-6 leading-relaxed">
                         Uncover exactly how much your organization saves with IronFlow. Drag the sliders below to adjust your hourly downtime cost and yearly hours saved.
                       </p>
 
