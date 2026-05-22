@@ -1621,35 +1621,19 @@ export default function LandingPage() {
           ============================================================================ */}
       <footer className="border-t border-slate-200 bg-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8 font-mono text-[10px] text-slate-secondary">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8 font-sans text-xs text-slate-secondary">
             
             <div className="flex flex-col items-center md:items-start space-y-2">
               <div className="flex items-center space-x-2">
                 <Icons.Logo />
                 <div className="flex flex-col">
                   <span className="font-display font-bold text-base tracking-tight text-slate-primary">IronFlow Softwares</span>
-                  <span className="text-[9px] font-mono tracking-widest text-safety-orange font-bold uppercase -mt-0.5">Keep Everything Running.</span>
+                  <span className="text-[10px] font-sans tracking-widest text-safety-orange font-bold uppercase -mt-0.5">Keep Everything Running.</span>
                 </div>
               </div>
               <p className="text-slate-muted text-center md:text-left mt-1">
                 © {new Date().getFullYear()} IronFlow Softwares. All rights reserved. Deployed via Edge Core Node.
               </p>
-            </div>
-
-            {/* Industrial IoT & SRE Compliance Badges */}
-            <div className="flex flex-wrap justify-center gap-3">
-              <span className="border border-slate-200 bg-slate-50 px-3 py-2 rounded-lg text-slate-primary font-semibold shadow-sm">
-                ATEX ZONE 1 & 2 SAFE
-              </span>
-              <span className="border border-slate-200 bg-slate-50 px-3 py-2 rounded-lg text-slate-primary font-semibold shadow-sm">
-                E2E TLS 1.3 SECURED
-              </span>
-              <span className="border border-slate-200 bg-slate-50 px-3 py-2 rounded-lg text-slate-primary font-semibold shadow-sm">
-                SOC2 COMPLIANT
-              </span>
-              <span className="border border-slate-200 bg-slate-50 px-3 py-2 rounded-lg text-slate-primary font-semibold shadow-sm">
-                SQL WAL FAILOVER PROTECTION
-              </span>
             </div>
 
           </div>
