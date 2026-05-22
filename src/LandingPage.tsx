@@ -347,25 +347,6 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* SRE Operational Beacon */}
-          <div className="hidden md:flex items-center space-x-6 bg-slate-50/80 border border-slate-200 px-4 py-2 rounded font-mono text-xs shadow-sm">
-            <div className="flex items-center space-x-2">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping-slow absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-              </span>
-              <span className="text-slate-muted">NODE_04_GULF:</span>
-              <span className="text-emerald-600 font-bold">ONLINE</span>
-            </div>
-            <div className="h-3 w-px bg-slate-300" />
-            <div className="text-slate-secondary">
-              LATENCY: <span className="text-slate-primary font-bold">12ms</span>
-            </div>
-            <div className="h-3 w-px bg-slate-300" />
-            <div className="text-slate-secondary">
-              SYNC_WAL: <span className="text-slate-primary font-bold">CONNECTED</span>
-            </div>
-          </div>
 
           <nav className="flex items-center space-x-6">
             <a href="#features" className="hidden sm:inline-block text-xs font-mono font-bold text-slate-secondary hover:text-electric transition-colors uppercase tracking-wider">Features</a>
