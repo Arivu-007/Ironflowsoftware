@@ -256,10 +256,22 @@ export default function LandingPage() {
   const [assetVolume, setAssetVolume] = useState<string>('1k_10k');
   const [environmentProfile, setEnvironmentProfile] = useState<string>('zone_1');
   const [formStep, setFormStep] = useState<'idle' | 'verifying' | 'allocating' | 'success'>('idle');
+  const [isBrochureOpen, setIsBrochureOpen] = useState<boolean>(false);
 
   // ============================================================================
   // SIDE EFFECTS (Simulated background dashboard activity)
   // ============================================================================
+
+  // Listen for escape key press to close brochure modal
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsBrochureOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   // Simulating live work order log & telemetry stream
   useEffect(() => {
@@ -410,12 +422,13 @@ export default function LandingPage() {
               >
                 EXPLORE CORE PILLARS
               </a>
-              <a 
-                href="#demo" 
-                className="border border-slate-200 bg-white hover:border-slate-400 px-8 py-4 rounded text-sm font-display font-bold text-slate-secondary hover:text-slate-primary text-center transition-all duration-300 shadow-sm"
+              <button 
+                onClick={() => setIsBrochureOpen(true)}
+                className="border border-slate-200 bg-white hover:border-slate-400 px-8 py-4 rounded text-sm font-display font-bold text-slate-secondary hover:text-slate-primary text-center transition-all duration-300 shadow-sm flex items-center justify-center space-x-2"
               >
-                REQUEST FREE DEMO
-              </a>
+                <Icons.Globe className="w-4 h-4 text-safety-orange" />
+                <span>VIEW MARKETING BROCHURE</span>
+              </button>
             </div>
           </div>
  
@@ -1435,6 +1448,30 @@ export default function LandingPage() {
                 </div>
               </div>
 
+              {/* Brochure Preview Card */}
+              <div 
+                onClick={() => setIsBrochureOpen(true)}
+                className="group relative bg-slate-50 hover:bg-white border border-slate-200 hover:border-safety-orange/30 rounded-xl p-4 flex items-center space-x-4 shadow-inner hover:shadow-neon-orange transition-all duration-300 cursor-pointer"
+              >
+                <div className="relative w-20 h-20 rounded-lg overflow-hidden border border-slate-200 shrink-0 shadow-sm bg-slate-100 flex items-center justify-center">
+                  <img src="/brochure.jpg" alt="IronFlow Brochure Preview" className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105" />
+                  <div className="absolute inset-0 bg-slate-950/20 group-hover:bg-slate-950/0 transition-colors duration-300" />
+                  <div className="absolute bottom-1 right-1 bg-slate-950/75 text-white px-1 py-0.5 rounded text-[8px] font-mono tracking-widest uppercase">HD</div>
+                </div>
+                <div className="font-sans flex-1 min-w-0">
+                  <span className="text-[10px] font-mono text-safety-orange font-bold uppercase tracking-wider block">Marketing Material</span>
+                  <span className="text-sm font-display font-extrabold text-slate-primary block truncate mt-0.5 group-hover:text-safety-orange transition-colors">Official Product Brochure</span>
+                  <span className="text-[11px] text-slate-secondary block mt-1 leading-normal">Interactive preview of IronFlow capabilities, workflows, and specifications.</span>
+                  <span className="inline-flex items-center text-[10px] font-mono font-bold text-electric group-hover:text-safety-orange transition-colors mt-2">
+                    <span>EXPLORE FULLSCREEN</span>
+                    <svg className="w-3.5 h-3.5 ml-1 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+
               {/* Official Brochure Contact Details */}
               <div className="border-t border-slate-100 pt-6 space-y-4 text-xs font-mono">
                 <div className="flex items-center space-x-3 text-slate-secondary hover:text-electric transition-colors">
@@ -1620,6 +1657,124 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+
+      {/* ============================================================================
+          INTERACTIVE MARKETING BROCHURE LIGHTBOX MODAL (Premium Fullscreen View)
+          ============================================================================ */}
+      <AnimatePresence>
+        {isBrochureOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md overflow-y-auto animate-fade-in"
+            role="dialog"
+            aria-modal="true"
+            onClick={() => setIsBrochureOpen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="relative bg-white border border-slate-200 rounded-2xl shadow-cyber-card max-w-5xl w-full overflow-hidden flex flex-col md:flex-row my-8"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button Top Right (Mobile & Desktop overlay) */}
+              <button
+                onClick={() => setIsBrochureOpen(false)}
+                className="absolute top-4 right-4 z-10 bg-slate-900/80 hover:bg-slate-900 text-white rounded-full p-2.5 transition-colors shadow-lg hover:scale-105 active:scale-95"
+                aria-label="Close modal"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+
+              {/* Left Column: High-Res Brochure Display */}
+              <div className="flex-1 bg-slate-100 p-4 md:p-8 flex items-center justify-center relative overflow-hidden group select-none min-h-[350px] md:min-h-[500px]">
+                <div className="absolute inset-0 bg-grid-pattern bg-[size:20px_20px] opacity-20" />
+                
+                {/* Real High Definition Image */}
+                <motion.div 
+                  className="relative max-h-[80vh] rounded-lg shadow-2xl overflow-hidden border border-slate-200"
+                  whileHover={{ scale: 1.01 }}
+                >
+                  <img
+                    src="/brochure.jpg"
+                    alt="IronFlow Software Official Marketing Brochure"
+                    className="w-full h-full object-contain object-center pointer-events-none"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent pointer-events-none" />
+                </motion.div>
+              </div>
+
+              {/* Right Column: Premium Flyer Control Panel */}
+              <div className="w-full md:w-[320px] bg-slate-950 text-slate-100 p-6 md:p-8 flex flex-col justify-between border-t md:border-t-0 md:border-l border-slate-800 shrink-0 font-sans">
+                <div className="space-y-6">
+                  {/* Header & Logo */}
+                  <div className="flex items-center space-x-2 border-b border-slate-900 pb-4">
+                    <Icons.Logo />
+                    <div className="flex flex-col">
+                      <span className="font-display font-extrabold text-lg tracking-tight text-white">IronFlow</span>
+                      <span className="text-[8px] font-mono tracking-widest text-safety-orange font-bold uppercase -mt-0.5">Marketing Brochure</span>
+                    </div>
+                  </div>
+
+                  {/* Information Details */}
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-widest">Document Title</h4>
+                      <p className="text-sm font-semibold text-white mt-1">Official Product Overview Flyer</p>
+                    </div>
+                    
+                    <div>
+                      <h4 className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-widest">Target Industry</h4>
+                      <p className="text-sm font-semibold text-white mt-1">Industrial, Field Service & Energy Sectors</p>
+                    </div>
+
+                    <div>
+                      <h4 className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-widest">Key Core Features</h4>
+                      <div className="mt-2.5 flex flex-wrap gap-1.5">
+                        {['Hierarchy', 'Barcoding', 'Schedules', 'Compliance', 'Offline WAL', 'gRPC'].map((tag) => (
+                          <span key={tag} className="bg-slate-900 border border-slate-800 text-slate-300 font-mono text-[9px] px-2 py-0.5 rounded">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="bg-slate-900/60 border border-slate-800 rounded-lg p-3.5 text-[11px] leading-relaxed text-slate-400 font-sans">
+                      This official marketing brochure describes the complete capabilities of the <strong className="text-white">IronFlow CMMS Suite</strong>, designed for mission-critical operations requiring extreme reliability and offline-first database resilience.
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer and Downloads */}
+                <div className="space-y-4 mt-8 md:mt-0">
+                  <a
+                    href="/brochure.jpg"
+                    download="IronFlow_Software_Brochure.jpg"
+                    className="w-full bg-gradient-to-r from-safety-orange to-orange-600 hover:opacity-95 text-white px-5 py-3 rounded-lg text-xs font-display font-bold tracking-wider transition-all duration-300 shadow-neon-orange flex items-center justify-center space-x-2 active:scale-[0.98]"
+                  >
+                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                    </svg>
+                    <span>DOWNLOAD HIGH-RES</span>
+                  </a>
+
+                  <button
+                    onClick={() => setIsBrochureOpen(false)}
+                    className="w-full border border-slate-800 bg-transparent hover:border-slate-700 text-slate-400 hover:text-white px-5 py-3 rounded-lg text-xs font-display font-bold transition-all duration-300 text-center uppercase tracking-wider block"
+                  >
+                    Return to Site
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
     </div>
   );
