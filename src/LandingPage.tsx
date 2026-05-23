@@ -144,30 +144,31 @@ const Icons = {
       <line x1="2" y1="12" x2="22" y2="12" />
       <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
     </svg>
+  ),
+  Clock: ({ className = "w-6 h-6" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <polyline points="12 6 12 12 16 14" />
+    </svg>
+  ),
+  Monitor: ({ className = "w-6 h-6" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+      <line x1="8" y1="21" x2="16" y2="21" />
+      <line x1="12" y1="17" x2="12" y2="21" />
+    </svg>
+  ),
+  Dollar: ({ className = "w-6 h-6" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="12" y1="1" x2="12" y2="23" />
+      <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+    </svg>
   )
 };
 
 // ============================================================================
 // TYPES & MOCK DATA
 // ============================================================================
-
-interface AssetWorkOrder {
-  id: string;
-  orderNumber: string;
-  assetName: string;
-  type: 'Preventive' | 'Corrective' | 'Safety';
-  status: 'Open' | 'In Progress' | 'Closed';
-  priority: 'Low' | 'Medium' | 'High' | 'Critical';
-  assignedTo: string;
-  timestamp: string;
-}
-
-const INITIAL_WORK_ORDERS: AssetWorkOrder[] = [
-  { id: '1', orderNumber: 'WO-2940', assetName: 'Subsea Blowout Preventer A-1', type: 'Preventive', status: 'In Progress', priority: 'Critical', assignedTo: 'M. Harris (SRE)', timestamp: '10:42' },
-  { id: '2', orderNumber: 'WO-2941', assetName: 'Mud Pump Reciprocator #4B', type: 'Corrective', status: 'Open', priority: 'High', assignedTo: 'T. Vance (Tech)', timestamp: '11:15' },
-  { id: '3', orderNumber: 'WO-2942', assetName: 'Main Power Gen Generator B', type: 'Preventive', status: 'Closed', priority: 'Medium', assignedTo: 'R. Patel (SRE)', timestamp: '09:00' },
-  { id: '4', orderNumber: 'WO-2943', assetName: 'ATEX Telemetry Antenna Deck', type: 'Safety', status: 'Open', priority: 'High', assignedTo: 'J. Doe (Safety)', timestamp: '11:38' }
-];
 
 const API_PLAYGROUND_ROUTES = [
   {
@@ -213,12 +214,6 @@ const API_PLAYGROUND_ROUTES = [
 ];
 
 export default function LandingPage() {
-  // --- Hero Interactive Terminal State ---
-  const [workOrders, setWorkOrders] = useState<AssetWorkOrder[]>(INITIAL_WORK_ORDERS);
-  const [isSimulatingOrders, setIsSimulatingOrders] = useState(true);
-  const [totalWorkOrders, setTotalWorkOrders] = useState(142);
-  const [efficiencyGraph, setEfficiencyGraph] = useState<number[]>([85, 87, 86, 90, 89, 93, 92, 95, 96, 98]);
-
   // --- Core Interactive Tab/Pillar Selection State ---
   const [activePillar, setActivePillar] = useState<'asset' | 'work_order' | 'preventive' | 'reports'>('asset');
 
@@ -273,43 +268,6 @@ export default function LandingPage() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Simulating live work order log & telemetry stream
-  useEffect(() => {
-    if (!isSimulatingOrders) return;
-    const interval = setInterval(() => {
-      const assetNames = ['Subsea Blowout Preventer A-1', 'Mud Pump Reciprocator #4B', 'Main Power Gen Generator B', 'ATEX Telemetry Antenna Deck', 'Gas Compressor Valve #2', 'Emergency Flare Igniter'];
-      const types: ('Preventive' | 'Corrective' | 'Safety')[] = ['Preventive', 'Corrective', 'Safety'];
-      const statuses: ('Open' | 'In Progress' | 'Closed')[] = ['Open', 'In Progress', 'Closed'];
-      const priorities: ('Low' | 'Medium' | 'High' | 'Critical')[] = ['Low', 'Medium', 'High', 'Critical'];
-      const technicians = ['M. Harris (SRE)', 'T. Vance (Tech)', 'R. Patel (SRE)', 'J. Doe (Safety)', 'S. Clark (Tech)'];
-
-      const randomIdx = Math.floor(Math.random() * assetNames.length);
-      const now = new Date();
-      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-      const newOrder: AssetWorkOrder = {
-        id: Math.random().toString(),
-        orderNumber: `WO-${Math.floor(Math.random() * 1000 + 2000)}`,
-        assetName: assetNames[randomIdx],
-        type: types[Math.floor(Math.random() * types.length)],
-        status: statuses[Math.floor(Math.random() * statuses.length)],
-        priority: priorities[Math.floor(Math.random() * priorities.length)],
-        assignedTo: technicians[Math.floor(Math.random() * technicians.length)],
-        timestamp: timeStr
-      };
-
-      setWorkOrders(prev => [newOrder, ...prev.slice(0, 3)]);
-      setTotalWorkOrders(prev => prev + 1);
-
-      setEfficiencyGraph(prev => {
-        const nextVal = Math.max(80, Math.min(100, prev[prev.length - 1] + Math.floor(Math.random() * 5 - 2)));
-        return [...prev.slice(1), nextVal];
-      });
-    }, 4000);
-
-    return () => clearInterval(interval);
-  }, [isSimulatingOrders]);
-
   const triggerScheduleAlert = () => {
     setIsSchedulingAlert(true);
     setTimeout(() => {
@@ -355,13 +313,14 @@ export default function LandingPage() {
             <Icons.Logo />
             <div className="flex flex-col">
               <span className="font-display font-bold text-2xl tracking-tight text-slate-primary">IronFlow</span>
-              <span className="text-[9px] font-mono tracking-widest text-electric font-bold uppercase -mt-0.5">SOFTWARES</span>
+              <span className="text-[9px] font-mono tracking-widest text-electric font-bold uppercase -mt-0.5">SOFTWARE</span>
             </div>
           </div>
 
 
           <nav className="flex items-center space-x-6">
-            <a href="#features" className="hidden sm:inline-block text-xs font-mono font-bold text-slate-secondary hover:text-electric transition-colors uppercase tracking-wider">Features</a>
+            <a href="#features" className="hidden sm:inline-block text-xs font-mono font-bold text-slate-secondary hover:text-electric transition-colors uppercase tracking-wider">Capabilities</a>
+            <a href="#playground" className="hidden sm:inline-block text-xs font-mono font-bold text-slate-secondary hover:text-electric transition-colors uppercase tracking-wider">Playground</a>
             <a href="#specs" className="hidden sm:inline-block text-xs font-mono font-bold text-slate-secondary hover:text-electric transition-colors uppercase tracking-wider">Specs</a>
             <a href="#api" className="hidden sm:inline-block text-xs font-mono font-bold text-slate-secondary hover:text-electric transition-colors uppercase tracking-wider">API</a>
             <a 
@@ -375,357 +334,358 @@ export default function LandingPage() {
       </header>
 
       {/* ============================================================================
-          HERO SECTION (High Utility, Premium CMMS Dashboard Layout)
+          HERO SECTION (Brochure-Aligned Premium Design Layout)
           ============================================================================ */}
       <section className="relative pt-16 pb-24 md:py-32 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
           {/* Hero Content Left */}
-          <div className="lg:col-span-5 flex flex-col justify-center space-y-8">
+          <div className="lg:col-span-6 flex flex-col justify-center space-y-8">
             <div className="inline-flex items-center space-x-2 bg-orange-50 border border-orange-200/80 px-4 py-1.5 rounded-full text-xs font-mono text-safety-orange w-fit shadow-sm">
               <span className="inline-block w-2.5 h-2.5 bg-safety-orange rounded-full animate-pulse shadow-neon-orange" />
-              <span className="font-bold uppercase tracking-wider">Track. Maintain. Optimize.</span>
+              <span className="font-bold uppercase tracking-wider">Mobile-First Maintenance Management</span>
             </div>
             
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold tracking-tight text-slate-primary leading-tight">
-              Complete Maintenance & <span className="text-safety-orange bg-gradient-to-r from-orange-600 via-safety-orange to-amber-500 bg-clip-text text-transparent">Asset Management</span>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-display font-extrabold tracking-tight text-slate-primary leading-tight uppercase">
+              Reduce Downtime.<br />
+              Simplify Maintenance.<br />
+              <span className="text-safety-orange bg-gradient-to-r from-orange-600 via-safety-orange to-amber-500 bg-clip-text text-transparent">Complete Maintenance & Asset Management.</span>
             </h1>
  
-            <p className="text-slate-secondary text-base sm:text-lg leading-relaxed max-w-lg">
-              IronFlow Softwares helps industrial and field service companies streamline maintenance, manage assets, and complete more work with less downtime—so your operations run stronger every day.
+            <p className="text-slate-secondary text-base sm:text-lg leading-relaxed">
+              <strong>IronFlow Software</strong> helps pipe coating companies, steel mills, and industrial operations prevent equipment failures, automate preventive maintenance, and keep every maintenance record audit-ready — all in one simple, powerful platform.
             </p>
- 
-            {/* SRE Key Metrics checklist */}
-            <div className="grid grid-cols-2 gap-6 border-t border-b border-slate-200/80 py-6 my-2">
-              <div>
-                <div className="text-[10px] font-mono font-bold text-slate-muted uppercase tracking-wider">Average Health Index</div>
-                <div className="text-2xl font-display font-bold text-slate-primary tracking-tight">98.6%</div>
-              </div>
-              <div>
-                <div className="text-[10px] font-mono font-bold text-slate-muted uppercase tracking-wider">Unscheduled Downtime</div>
-                <div className="text-2xl font-display font-bold text-slate-primary tracking-tight">0.0 Hours</div>
-              </div>
-              <div>
-                <div className="text-[10px] font-mono font-bold text-slate-muted uppercase tracking-wider">Active PM Schedules</div>
-                <div className="text-2xl font-display font-bold text-slate-primary tracking-tight">24 Automated</div>
-              </div>
-              <div>
-                <div className="text-[10px] font-mono font-bold text-slate-muted uppercase tracking-wider">Database Security</div>
-                <div className="text-2xl font-display font-bold text-slate-primary tracking-tight">Cloud-Secured</div>
-              </div>
-            </div>
  
             <div className="flex flex-col sm:flex-row gap-4 pt-2">
               <a 
                 href="#features" 
                 className="bg-gradient-to-r from-safety-orange via-orange-600 to-amber-500 text-white px-8 py-4 rounded text-sm font-display font-bold tracking-wider text-center transition-all duration-300 shadow-neon-orange-intense hover:-translate-y-0.5 active:scale-[0.98]"
               >
-                EXPLORE CORE PILLARS
+                EXPLORE SYSTEM CAPABILITIES
               </a>
               <button 
                 onClick={() => setIsBrochureOpen(true)}
                 className="border border-slate-200 bg-white hover:border-slate-400 px-8 py-4 rounded text-sm font-display font-bold text-slate-secondary hover:text-slate-primary text-center transition-all duration-300 shadow-sm flex items-center justify-center space-x-2"
               >
                 <Icons.Globe className="w-4 h-4 text-safety-orange" />
-                <span>VIEW MARKETING BROCHURE</span>
+                <span>VIEW CORPORATE BROCHURE</span>
               </button>
             </div>
           </div>
  
-          {/* Hero Right: Live Telemetry CMMS Mockup */}
-          <div className="lg:col-span-7">
-            <div className="bg-white/80 border border-white/60 backdrop-blur-xl rounded-xl shadow-cyber-card relative overflow-hidden p-1.5 hover:shadow-neon-orange-intense transition-all duration-300">
+          {/* Hero Right: Brochure Preview Image & Fullscreen Lightbox Trigger */}
+          <div className="lg:col-span-6 flex flex-col justify-center items-center lg:items-end">
+            <button
+              onClick={() => setIsBrochureOpen(true)}
+              className="group relative max-w-md w-full bg-white border border-slate-200/80 rounded-2xl p-3 shadow-cyber-card hover:shadow-neon-orange hover:border-orange-200/60 hover:-translate-y-1 transition-all duration-500 cursor-pointer overflow-hidden animate-fade-in"
+            >
+              {/* Luminous overlay effect */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-orange-400/5 via-transparent to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               
-              {/* Telemetry Header */}
-              <div className="bg-slate-100/80 border border-slate-200/80 rounded-t-lg px-4 py-3 flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <div className="flex space-x-1.5">
-                    <span className="w-3 h-3 bg-red-400 rounded-full shadow-sm" />
-                    <span className="w-3 h-3 bg-amber-400 rounded-full shadow-sm" />
-                    <span className="w-3 h-3 bg-emerald-400 rounded-full shadow-sm" />
-                  </div>
-                  <div className="h-4 w-px bg-slate-300 mx-1" />
-                  <span className="font-mono text-xs font-bold text-slate-muted">IRONFLOW_CMMS_CORE_V5.12</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <button 
-                    onClick={() => setIsSimulatingOrders(prev => !prev)}
-                    className={`px-2.5 py-1 rounded text-[10px] font-mono font-bold tracking-wider transition-colors ${
-                      isSimulatingOrders 
-                        ? 'bg-orange-100 text-orange-700 border border-orange-200' 
-                        : 'bg-slate-200 text-slate-600 border border-transparent'
-                    }`}
-                  >
-                    {isSimulatingOrders ? '● SIMULATION RUNNING' : 'PAUSED'}
-                  </button>
-                  <span className="text-[10px] font-mono text-slate-muted">SECURE_SYNC: OK</span>
-                </div>
-              </div>
- 
-              {/* Telemetry Main Interface */}
-              <div className="p-4 grid grid-cols-1 md:grid-cols-12 gap-4">
+              <div className="relative rounded-xl overflow-hidden border border-slate-100 bg-slate-50 flex items-center justify-center">
+                <img 
+                  src="/brochure.jpg" 
+                  alt="IronFlow Software Corporate Brochure Preview" 
+                  className="w-full h-auto object-cover max-h-[460px] group-hover:scale-[1.01] transition-transform duration-500"
+                />
                 
-                {/* Left Side: Real-time scan log */}
-                <div className="md:col-span-7 bg-slate-950 border border-slate-800 rounded-lg p-4 relative h-[260px] overflow-hidden flex flex-col justify-between shadow-inner">
-                  {isSimulatingOrders && (
-                    <div className="absolute left-0 right-0 h-0.5 bg-safety-orange/40 animate-scan shadow-neon-orange pointer-events-none" />
-                  )}
-                  
-                  <div>
-                    <div className="text-[10px] font-mono text-slate-400 border-b border-slate-800 pb-2 flex justify-between uppercase">
-                      <span>Live Dispatch Feed</span>
-                      <span className="text-safety-orange font-bold">{totalWorkOrders} Handled</span>
-                    </div>
- 
-                    <div className="mt-2.5 space-y-2">
-                      <AnimatePresence initial={false}>
-                        {workOrders.map((order) => (
-                          <motion.div
-                            key={order.id}
-                            initial={{ opacity: 0, x: -10, height: 0 }}
-                            animate={{ opacity: 1, x: 0, height: 'auto' }}
-                            exit={{ opacity: 0, x: 20, height: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="text-[11px] font-mono flex items-center justify-between py-1 border-b border-slate-900 text-slate-200"
-                          >
-                            <div className="flex items-center space-x-2 truncate">
-                              <span className={`w-1.5 h-1.5 rounded-full ${
-                                order.status === 'Open' ? 'bg-amber-400' : order.status === 'In Progress' ? 'bg-safety-orange animate-pulse' : 'bg-emerald-400'
-                              }`} />
-                              <span className="text-slate-600">[{order.timestamp}]</span>
-                              <span className="text-white font-bold">{order.orderNumber}</span>
-                              <span className="text-slate-400 truncate">{order.assetName}</span>
-                            </div>
-                            <span className={`font-semibold pl-1 font-mono text-[9px] px-1 py-0.5 rounded ${
-                              order.priority === 'Critical' ? 'bg-red-950 text-red-400 border border-red-500/20' : 'bg-slate-900 text-slate-400'
-                            }`}>{order.priority}</span>
-                          </motion.div>
-                        ))}
-                      </AnimatePresence>
-                    </div>
-                  </div>
-                  
-                  {/* Local Hardware diagnostics */}
-                  <div className="border-t border-slate-900 pt-2 text-[10px] font-mono text-slate-500 flex justify-between items-center">
-                    <span>Cloud State: Secure SSL</span>
-                    <span>Role Access: Delta Team</span>
-                    <span>Nodes: 3 active</span>
-                  </div>
+                {/* Overlay Hover Badge */}
+                <div className="absolute inset-0 bg-slate-950/20 backdrop-blur-[1px] opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
+                  <span className="bg-slate-900/90 text-white border border-slate-700 px-5 py-2.5 rounded-full font-display font-bold text-xs tracking-wider uppercase shadow-[0_0_15px_rgba(249,115,22,0.3)]">
+                    🔍 View Fullscreen Brochure
+                  </span>
                 </div>
- 
-                {/* Right Side: High-density data dials */}
-                <div className="md:col-span-5 flex flex-col gap-3">
-                  
-                  {/* Database Wallet Sync State */}
-                  <div className="bg-white/70 border border-white/60 backdrop-blur-xl rounded-lg p-4 flex flex-col justify-between h-[120px] shadow-sm hover:shadow-neon-orange hover:bg-white/90 transition-all duration-300">
-                    <div className="flex justify-between items-center text-[10px] font-mono font-bold uppercase text-slate-muted">
-                      <span>Asset Health Index</span>
-                      <Icons.Asset className="w-4 h-4 text-safety-orange animate-pulse-subtle" />
-                    </div>
-                    <div className="my-1.5">
-                      <div className="text-2xl font-display font-bold text-slate-primary">98.6%</div>
-                      <div className="text-[10px] font-mono text-slate-secondary">No active critical failures.</div>
-                    </div>
-                    <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                      <div className="h-full bg-safety-orange w-[98.6%]" />
-                    </div>
-                  </div>
- 
-                  {/* Dynamic Tag Pulse Density / PM Compliance Uptime */}
-                  <div className="bg-white/70 border border-white/60 backdrop-blur-xl rounded-lg p-4 flex flex-col justify-between h-[125px] shadow-sm hover:shadow-neon-orange hover:bg-white/90 transition-all duration-300">
-                    <div className="flex justify-between items-center text-[10px] font-mono font-bold uppercase text-slate-muted">
-                      <span>Maintenance Compliance</span>
-                      <Icons.Chart className="w-4 h-4 text-safety-orange" />
-                    </div>
-                    
-                    {/* Simulated live visual sparkline bars */}
-                    <div className="h-10 flex items-end justify-between gap-1 mt-1 bg-slate-50 border border-slate-100 p-1.5 rounded">
-                      {efficiencyGraph.map((val, idx) => (
-                        <div 
-                           key={idx} 
-                           className="w-full bg-orange-400/80 hover:bg-orange-500 rounded-t-sm transition-colors"
-                           style={{ height: `${val}%` }}
-                        />
-                      ))}
-                    </div>
- 
-                    <div className="text-[9px] font-mono text-slate-secondary flex justify-between items-center pt-1 border-t border-slate-100">
-                      <span>Avg Compliance: 92%</span>
-                      <span>Target Uptime: 99%</span>
-                    </div>
-                  </div>
- 
-                </div>
- 
               </div>
- 
-            </div>
+            </button>
+            <p className="text-[11px] font-mono text-slate-muted mt-3 text-center lg:text-right w-full max-w-md pr-2">
+              ★ Click brochure flyer to open high-resolution interactive lightbox viewer
+            </p>
           </div>
- 
+
+        </div>
+
+        {/* ============================================================================
+            5-COLUMN CORE VALUE PILLARS ROW (Brochure Aligned)
+            ============================================================================ */}
+        <div className="mt-20 border-t border-slate-200/80 pt-16">
+          <div className="text-center max-w-3xl mx-auto mb-12 space-y-2">
+            <h2 className="text-xs font-mono font-bold tracking-widest text-electric uppercase">Operational Pillars</h2>
+            <p className="text-2xl sm:text-3xl font-display font-extrabold tracking-tight text-slate-primary">
+              Core Values of IronFlow Software
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+            
+            {/* Pillar 1 */}
+            <div className="bg-white border border-slate-200/80 rounded-xl p-5 hover:shadow-neon-orange hover:border-orange-200/60 hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center shadow-sm">
+              <div className="bg-orange-50 text-safety-orange border border-orange-100 p-3 rounded-lg w-fit mb-3">
+                <Icons.Clock className="w-5 h-5" />
+              </div>
+              <h4 className="font-display font-extrabold text-xs text-slate-primary uppercase tracking-wider">Reduce Downtime</h4>
+              <p className="text-[11px] text-slate-secondary mt-2 leading-relaxed">Prevent failures before they happen.</p>
+            </div>
+
+            {/* Pillar 2 */}
+            <div className="bg-white border border-slate-200/80 rounded-xl p-5 hover:shadow-neon-teal hover:border-blue-200/60 hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center shadow-sm">
+              <div className="bg-blue-50 text-electric border border-blue-100 p-3 rounded-lg w-fit mb-3">
+                <Icons.Wrench className="w-5 h-5" />
+              </div>
+              <h4 className="font-display font-extrabold text-xs text-slate-primary uppercase tracking-wider">Keep Techs Efficient</h4>
+              <p className="text-[11px] text-slate-secondary mt-2 leading-relaxed">Mobile tools that techs love to use.</p>
+            </div>
+
+            {/* Pillar 3 */}
+            <div className="bg-white border border-slate-200/80 rounded-xl p-5 hover:shadow-neon-orange hover:border-orange-200/60 hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center shadow-sm">
+              <div className="bg-orange-50 text-safety-orange border border-orange-100 p-3 rounded-lg w-fit mb-3">
+                <Icons.Shield className="w-5 h-5" />
+              </div>
+              <h4 className="font-display font-extrabold text-xs text-slate-primary uppercase tracking-wider">Stay Compliant</h4>
+              <p className="text-[11px] text-slate-secondary mt-2 leading-relaxed">Auto-store every record for audits.</p>
+            </div>
+
+            {/* Pillar 4 */}
+            <div className="bg-white border border-slate-200/80 rounded-xl p-5 hover:shadow-neon-teal hover:border-blue-200/60 hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center shadow-sm">
+              <div className="bg-blue-50 text-electric border border-blue-100 p-3 rounded-lg w-fit mb-3">
+                <Icons.Monitor className="w-5 h-5" />
+              </div>
+              <h4 className="font-display font-extrabold text-xs text-slate-primary uppercase tracking-wider">Gain Visibility</h4>
+              <p className="text-[11px] text-slate-secondary mt-2 leading-relaxed">Know what's happening. Anytime. Anywhere.</p>
+            </div>
+
+            {/* Pillar 5 */}
+            <div className="bg-white border border-slate-200/80 rounded-xl p-5 hover:shadow-neon-orange hover:border-orange-200/60 hover:-translate-y-1 transition-all duration-300 col-span-2 md:col-span-1 flex flex-col items-center text-center shadow-sm">
+              <div className="bg-orange-50 text-safety-orange border border-orange-100 p-3 rounded-lg w-fit mb-3">
+                <Icons.Dollar className="w-5 h-5" />
+              </div>
+              <h4 className="font-display font-extrabold text-xs text-slate-primary uppercase tracking-wider">Lower Costs & Waste</h4>
+              <p className="text-[11px] text-slate-secondary mt-2 leading-relaxed">Extend asset life. Improve ROI.</p>
+            </div>
+
+          </div>
+
+          {/* Callout Pill Banner */}
+          <div className="mt-12 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-2xl p-5 border border-slate-800 text-center font-display font-extrabold text-xs sm:text-sm md:text-base tracking-widest uppercase shadow-cyber-card flex flex-col sm:flex-row items-center justify-center gap-2">
+            <span>One System.</span>
+            <span className="text-electric-blue">All Your Assets.</span>
+            <span className="text-safety-orange">Total Control.</span>
+          </div>
+        </div>
+
+      </section>
+
+      {/* ============================================================================
+          CAPABILITY MATRIX (Brochure-Aligned 4-Column side-by-side Showcase)
+          ============================================================================ */}
+      <section id="features" className="py-24 md:py-32 relative border-t border-slate-200/80 bg-slate-50">
+        <div className="absolute inset-0 bg-grid-pattern bg-[size:35px_35px] opacity-[0.03] pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          
+          <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
+            <h2 className="text-xs font-mono font-bold tracking-widest text-safety-orange uppercase">Capability Matrix</h2>
+            <p className="text-3xl sm:text-4xl font-display font-extrabold tracking-tight text-slate-primary uppercase">
+              EVERYTHING YOU NEED TO RUN BETTER MAINTENANCE
+            </p>
+            <p className="text-slate-secondary text-base max-w-xl mx-auto">
+              Our complete corporate checklist translated directly into a powerful side-by-side matrix. No tabs, no clicks, absolute transparency.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            
+            {/* Column 1: Preventive Maintenance */}
+            <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm hover:shadow-neon-orange hover:border-orange-200/60 hover:-translate-y-1 transition-all duration-300 flex flex-col">
+              <div className="bg-orange-50 text-safety-orange border border-orange-100 p-3.5 rounded-xl w-fit mb-5 shadow-sm">
+                <Icons.Calendar className="w-6 h-6" />
+              </div>
+              <h3 className="font-display font-extrabold text-sm text-slate-primary uppercase tracking-wider mb-2">Preventive Maintenance Automation</h3>
+              <p className="text-slate-secondary text-xs mb-6 leading-relaxed">Automated triggers and safety checklists to prevent failure before it happens.</p>
+              
+              <ul className="space-y-4 flex-1">
+                {[
+                  { t: 'PM Schedules & Automation', d: 'Automate compliance schedules to run on calendar or run-time triggers.' },
+                  { t: 'Calendar & Due Date Alerts', d: 'Visual calendars and alerts warn of upcoming milestones.' },
+                  { t: 'Auto-Generated Work Orders', d: 'Instantly create and assign tickets when intervals are breached.' },
+                  { t: 'Checklists & Procedures', d: 'Embed rigid step-by-step procedures to ensure safety compliance.' },
+                  { t: 'Failure Tracking & Trending', d: 'Analyze fault logs over time to foresee and prevent issues.' },
+                  { t: 'Compliance & Safety Tracking', d: 'Ensure absolute alignment with regulatory standards and hazard protocols.' },
+                  { t: 'Reduce Downtime & Costs', d: 'Drastically minimize operational disruption through proactive scheduling.' }
+                ].map((bullet, idx) => (
+                  <li key={idx} className="flex items-start space-x-3 text-xs leading-relaxed">
+                    <div className="bg-orange-50 text-safety-orange border border-orange-100 rounded p-0.5 mt-0.5 shadow-sm shrink-0">
+                      <Icons.Check className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <strong className="text-slate-primary font-bold">{bullet.t}</strong>
+                      <span className="text-slate-secondary block text-[11px] mt-0.5">{bullet.d}</span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Column 2: Mobile-First Tech */}
+            <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm hover:shadow-neon-teal hover:border-blue-200/60 hover:-translate-y-1 transition-all duration-300 flex flex-col">
+              <div className="bg-blue-50 text-electric border border-blue-100 p-3.5 rounded-xl w-fit mb-5 shadow-sm">
+                <Icons.Wrench className="w-6 h-6" />
+              </div>
+              <h3 className="font-display font-extrabold text-sm text-slate-primary uppercase tracking-wider mb-2">Mobile-First Technician Experience</h3>
+              <p className="text-slate-secondary text-xs mb-6 leading-relaxed">Frictionless interface designed for field SREs in the most rugged environments.</p>
+              
+              <ul className="space-y-4 flex-1">
+                {[
+                  { t: 'Create, Assign & Prioritize', d: 'Instantly dispatch critical tickets to SREs and technicians in the field.' },
+                  { t: 'Status Tracking (Open to Closed)', d: 'Track work progression in real-time with comprehensive status flows.' },
+                  { t: 'Work History & Audit Trail', d: 'Retain complete history logs of all modifications for insurance and safety.' },
+                  { t: 'Photos, Notes & Attachments', d: 'Attach pictures and site observations directly to work orders.' },
+                  { t: 'Time Tracking & Labor Logs', d: 'Record worker hours and shift handovers to optimize resource allocation.' },
+                  { t: 'Recurring & Preventive Work', d: 'Program repetitive tasks to occur automatically on calendar intervals.' },
+                  { t: 'Mobile Access for Field Teams', d: 'Seamless responsive access optimized for high-risk offshore environments.' }
+                ].map((bullet, idx) => (
+                  <li key={idx} className="flex items-start space-x-3 text-xs leading-relaxed">
+                    <div className="bg-blue-50 text-electric border border-blue-100 rounded p-0.5 mt-0.5 shadow-sm shrink-0">
+                      <Icons.Check className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <strong className="text-slate-primary font-bold">{bullet.t}</strong>
+                      <span className="text-slate-secondary block text-[11px] mt-0.5">{bullet.d}</span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Column 3: Asset Management */}
+            <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm hover:shadow-neon-orange hover:border-orange-200/60 hover:-translate-y-1 transition-all duration-300 flex flex-col">
+              <div className="bg-orange-50 text-safety-orange border border-orange-100 p-3.5 rounded-xl w-fit mb-5 shadow-sm">
+                <Icons.Asset className="w-6 h-6" />
+              </div>
+              <h3 className="font-display font-extrabold text-sm text-slate-primary uppercase tracking-wider mb-2">Asset Management & Tracking</h3>
+              <p className="text-slate-secondary text-xs mb-6 leading-relaxed">A complete digital twin inventory organized under deep, rigid facilities hierarchies.</p>
+              
+              <ul className="space-y-4 flex-1">
+                {[
+                  { t: 'Asset Tracking & Inventory', d: 'Auto-log field assets with absolute telemetry precision.' },
+                  { t: 'Asset Hierarchy & Locations', d: 'Organize complex systems across parent-child structures and geofenced platforms.' },
+                  { t: 'Asset History & Documentation', d: 'Maintain comprehensive immutable digital journals for each system.' },
+                  { t: 'Warranty & Service Records', d: 'Track supplier terms, service history agreements, and coverage limits.' },
+                  { t: 'QR Code / Barcode Scanning', d: 'Instantly verify asset details in the field using mobile device cameras.' },
+                  { t: 'Custom Fields & Attributes', d: 'Tailor asset metadata schemas perfectly to fit specific industrial standards.' },
+                  { t: 'Real-time Asset Status', d: 'Gain live operational insight into the physical health of active installations.' }
+                ].map((bullet, idx) => (
+                  <li key={idx} className="flex items-start space-x-3 text-xs leading-relaxed">
+                    <div className="bg-orange-50 text-safety-orange border border-orange-100 rounded p-0.5 mt-0.5 shadow-sm shrink-0">
+                      <Icons.Check className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <strong className="text-slate-primary font-bold">{bullet.t}</strong>
+                      <span className="text-slate-secondary block text-[11px] mt-0.5">{bullet.d}</span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Column 4: Reporting & Compliance */}
+            <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm hover:shadow-neon-teal hover:border-blue-200/60 hover:-translate-y-1 transition-all duration-300 flex flex-col">
+              <div className="bg-indigo-50 text-indigo-600 border border-indigo-100 p-3.5 rounded-xl w-fit mb-5 shadow-sm">
+                <Icons.Chart className="w-6 h-6" />
+              </div>
+              <h3 className="font-display font-extrabold text-sm text-slate-primary uppercase tracking-wider mb-2">Reporting & Compliance Made Easy</h3>
+              <p className="text-slate-secondary text-xs mb-6 leading-relaxed">Immutable safety reporting and custom ROI dashboard tools for rigorous audits.</p>
+              
+              <ul className="space-y-4 flex-1">
+                {[
+                  { t: 'Real-time Dashboards', d: 'Visualize critical KPIs, active work streams, and asset health instantaneously.' },
+                  { t: 'Work Order & Asset Reports', d: 'Export exhaustive reports on work order volumes, completions, and asset stats.' },
+                  { t: 'PM Compliance Reports', d: 'Generate legal proof of compliance for safety audits and regulatory checks.' },
+                  { t: 'Downtime & Cost Analysis', d: 'Uncover exactly how much downtime is costing your organization and how to fix it.' },
+                  { t: 'Exportable Data & Analytics', d: 'Connect reports directly into power analytics systems (CSV, JSON, PDF).' },
+                  { t: 'Custom Reports', d: 'Build custom reports tailored exactly to specialized industrial KPIs.' },
+                  { t: 'Make Smarter Decisions', d: 'Harness predictive insights to prioritize capital expenditures correctly.' }
+                ].map((bullet, idx) => (
+                  <li key={idx} className="flex items-start space-x-3 text-xs leading-relaxed">
+                    <div className="bg-indigo-50 text-indigo-600 border border-indigo-100 rounded p-0.5 mt-0.5 shadow-sm shrink-0">
+                      <Icons.Check className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <strong className="text-slate-primary font-bold">{bullet.t}</strong>
+                      <span className="text-slate-secondary block text-[11px] mt-0.5">{bullet.d}</span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+          </div>
+
         </div>
       </section>
 
       {/* ============================================================================
-          FEATURES GRID (High-Density, Interactive Pillars & Live Software Simulators)
+          INTERACTIVE CMMS SANDBOX PLAYGROUND
           ============================================================================ */}
-      <section id="features" className="py-24 md:py-32 relative border-t border-slate-200/80 bg-slate-50">
-        <div className="absolute inset-0 bg-cyber-gradient pointer-events-none" />
+      <section id="playground" className="py-24 md:py-32 relative border-t border-slate-200/80 bg-white">
+        <div className="absolute inset-0 bg-grid-pattern bg-[size:35px_35px] opacity-[0.02] pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           
           <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
-            <h2 className="text-xs font-mono font-bold tracking-widest text-electric uppercase">Four Pillars of Control</h2>
-            <p className="text-3xl sm:text-4xl font-display font-extrabold tracking-tight text-slate-primary">
-              Complete Maintenance & Asset Management Suite
+            <h2 className="text-xs font-mono font-bold tracking-widest text-electric uppercase">Interactive Sandbox</h2>
+            <p className="text-3xl sm:text-4xl font-display font-extrabold tracking-tight text-slate-primary uppercase">
+              INTERACTIVE CMMS PLAYGROUND
             </p>
             <p className="text-slate-secondary text-base max-w-xl mx-auto">
-              Click on each operational pillar to explore its 7 core features, and test its system logic using the live simulator panel.
+              Test drive our automation logic live! Toggle between simulators to experience real-time QR scans, drag work states, force preventive dispatches, or calculate your exact downtime savings.
             </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
             
-            {/* Left Column: 4 Pillars Tabs Selector */}
-            <div className="lg:col-span-5 flex flex-col space-y-6">
-              
-              <div className="flex flex-col space-y-3">
-                {[
-                  { id: 'asset', label: 'Asset Management', desc: 'Hierarchy, status & tracking', icon: Icons.Asset },
-                  { id: 'work_order', label: 'Work Order Management', desc: 'Create, dispatch & track logs', icon: Icons.Wrench },
-                  { id: 'preventive', label: 'Preventive Maintenance', desc: 'Automate compliance schedules', icon: Icons.Calendar },
-                  { id: 'reports', label: 'Reports & Insights', desc: 'Cost analysis & ROI metrics', icon: Icons.Chart }
-                ].map((pillar) => {
-                  const PillarIcon = pillar.icon;
-                  const isActive = activePillar === pillar.id;
-                  return (
-                    <button
-                      key={pillar.id}
-                      onClick={() => setActivePillar(pillar.id as any)}
-                      className={`w-full text-left p-4.5 rounded-xl border transition-all duration-300 flex items-start space-x-4 shadow-sm ${
-                        isActive
-                          ? 'border-electric bg-white text-slate-primary shadow-neon-teal ring-1 ring-electric/10'
-                          : 'border-slate-200 bg-white/70 hover:bg-white text-slate-secondary'
-                      }`}
-                    >
-                      <div className={`p-3 rounded-lg border transition-colors ${
-                        isActive ? 'bg-blue-50 border-blue-200 text-electric' : 'bg-slate-50 border-slate-100 text-slate-muted'
-                      }`}>
-                        <PillarIcon className="w-5 h-5" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <span className="font-display font-bold text-sm block text-slate-primary">{pillar.label}</span>
-                        <span className="text-[11px] text-slate-muted block mt-0.5 leading-normal">{pillar.desc}</span>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Bullet Features aligned with flyer */}
-              <div className="bg-white/80 border border-slate-200/80 rounded-xl p-6 shadow-sm">
-                <div className="text-[10px] font-mono font-bold text-slate-muted uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">
-                  {activePillar === 'asset' && 'Asset Management Capabilities'}
-                  {activePillar === 'work_order' && 'Work Order Capabilities'}
-                  {activePillar === 'preventive' && 'Preventive Maintenance Capabilities'}
-                  {activePillar === 'reports' && 'Reports & Insights Capabilities'}
-                </div>
-                
-                <ul className="space-y-3.5">
-                  {/* Render exact 7 bullets based on selected activePillar */}
-                  {activePillar === 'asset' && [
-                    { t: 'Asset Tracking & Inventory', d: 'Auto-log field assets with absolute telemetry precision.' },
-                    { t: 'Asset Hierarchy & Locations', d: 'Organize complex systems across parent-child structures and geofenced platforms.' },
-                    { t: 'Asset History & Documentation', d: 'Maintain comprehensive immutable digital journals for each system.' },
-                    { t: 'Warranty & Service Records', d: 'Track supplier terms, service history agreements, and coverage limits.' },
-                    { t: 'QR Code / Barcode Scanning', d: 'Instantly verify asset details in the field using mobile device cameras.' },
-                    { t: 'Custom Fields & Attributes', d: 'Tailor asset metadata schemas perfectly to fit specific industrial standards.' },
-                    { t: 'Real-time Asset Status', d: 'Gain live operational insight into the physical health of active installations.' }
-                  ].map((bullet, idx) => (
-                    <li key={idx} className="flex items-start space-x-3 text-xs leading-relaxed">
-                      <div className="bg-emerald-50 text-emerald-600 border border-emerald-100 rounded p-0.5 mt-0.5 shadow-sm">
-                        <Icons.Check className="w-3.5 h-3.5" />
-                      </div>
-                      <div>
-                        <strong className="text-slate-primary font-bold">{bullet.t}</strong>
-                        <span className="text-slate-secondary block text-[11px] mt-0.5">{bullet.d}</span>
-                      </div>
-                    </li>
-                  ))}
-
-                  {activePillar === 'work_order' && [
-                    { t: 'Create, Assign & Prioritize', d: 'Instantly dispatch critical tickets to SREs and technicians in the field.' },
-                    { t: 'Status Tracking (Open to Closed)', d: 'Track work progression in real-time with comprehensive status flows.' },
-                    { t: 'Work History & Audit Trail', d: 'Retain complete history logs of all modifications for insurance and safety.' },
-                    { t: 'Photos, Notes & Attachments', d: 'Attach pictures and site observations directly to work orders.' },
-                    { t: 'Time Tracking & Labor Logs', d: 'Record worker hours and shift handovers to optimize resource allocation.' },
-                    { t: 'Recurring & Preventive Work', d: 'Program repetitive tasks to occur automatically on calendar intervals.' },
-                    { t: 'Mobile Access for Field Teams', d: 'Seamless responsive access optimized for high-risk offshore environments.' }
-                  ].map((bullet, idx) => (
-                    <li key={idx} className="flex items-start space-x-3 text-xs leading-relaxed">
-                      <div className="bg-emerald-50 text-emerald-600 border border-emerald-100 rounded p-0.5 mt-0.5 shadow-sm">
-                        <Icons.Check className="w-3.5 h-3.5" />
-                      </div>
-                      <div>
-                        <strong className="text-slate-primary font-bold">{bullet.t}</strong>
-                        <span className="text-slate-secondary block text-[11px] mt-0.5">{bullet.d}</span>
-                      </div>
-                    </li>
-                  ))}
-
-                  {activePillar === 'preventive' && [
-                    { t: 'PM Schedules & Automation', d: 'Automate compliance schedules to run on calendar or run-time triggers.' },
-                    { t: 'Calendar & Due Date Alerts', d: 'Visual calendars and alerts warn of upcoming maintenance milestones.' },
-                    { t: 'Auto-Generated Work Orders', d: 'Instantly create and assign tickets when preventive intervals are breached.' },
-                    { t: 'Checklists & Procedures', d: 'Embed rigid step-by-step procedures to ensure safety compliance.' },
-                    { t: 'Failure Tracking & Trending', d: 'Analyze fault logs over time to foresee and prevent catastrophic issues.' },
-                    { t: 'Compliance & Safety Tracking', d: 'Ensure absolute alignment with regulatory standards and hazard protocols.' },
-                    { t: 'Reduce Downtime & Costs', d: 'Drastically minimize operational disruption through proactive maintenance.' }
-                  ].map((bullet, idx) => (
-                    <li key={idx} className="flex items-start space-x-3 text-xs leading-relaxed">
-                      <div className="bg-emerald-50 text-emerald-600 border border-emerald-100 rounded p-0.5 mt-0.5 shadow-sm">
-                        <Icons.Check className="w-3.5 h-3.5" />
-                      </div>
-                      <div>
-                        <strong className="text-slate-primary font-bold">{bullet.t}</strong>
-                        <span className="text-slate-secondary block text-[11px] mt-0.5">{bullet.d}</span>
-                      </div>
-                    </li>
-                  ))}
-
-                  {activePillar === 'reports' && [
-                    { t: 'Real-time Dashboards', d: 'Visualize critical KPIs, active work streams, and asset health instantaneously.' },
-                    { t: 'Work Order & Asset Reports', d: 'Export exhaustive reports on work order volumes, completions, and asset stats.' },
-                    { t: 'PM Compliance Reports', d: 'Generate legal proof of compliance for safety audits and regulatory checks.' },
-                    { t: 'Downtime & Cost Analysis', d: 'Uncover exactly how much downtime is costing your organization and how to fix it.' },
-                    { t: 'Exportable Data & Analytics', d: 'Connect reports directly into power analytics systems (CSV, JSON, PDF).' },
-                    { t: 'Custom Reports', d: 'Build custom reports tailored exactly to specialized industrial KPIs.' },
-                    { t: 'Make Smarter Decisions', d: 'Harness predictive insights to prioritize capital expenditures correctly.' }
-                  ].map((bullet, idx) => (
-                    <li key={idx} className="flex items-start space-x-3 text-xs leading-relaxed">
-                      <div className="bg-emerald-50 text-emerald-600 border border-emerald-100 rounded p-0.5 mt-0.5 shadow-sm">
-                        <Icons.Check className="w-3.5 h-3.5" />
-                      </div>
-                      <div>
-                        <strong className="text-slate-primary font-bold">{bullet.t}</strong>
-                        <span className="text-slate-secondary block text-[11px] mt-0.5">{bullet.d}</span>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
+            {/* Left Column: Playground Selector Tabs */}
+            <div className="lg:col-span-5 flex flex-col space-y-4">
+              {[
+                { id: 'asset', label: '1. Field Asset Telemetry', desc: 'Scan QR codes & track parent facility twin logs', icon: Icons.Asset },
+                { id: 'work_order', label: '2. Live Dispatch Board', desc: 'Cycle simulated work tickets through team statuses', icon: Icons.Wrench },
+                { id: 'preventive', label: '3. Compliance PM Dispatcher', desc: 'Adjust maintenance intervals and force auto-tickets', icon: Icons.Calendar },
+                { id: 'reports', label: '4. Financial ROI Engine', desc: 'Drag downtime parameters to calculate yearly savings', icon: Icons.Chart }
+              ].map((tab) => {
+                const TabIcon = tab.icon;
+                const isActive = activePillar === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActivePillar(tab.id as any)}
+                    className={`w-full text-left p-4.5 rounded-xl border transition-all duration-300 flex items-start space-x-4 shadow-sm ${
+                      isActive
+                        ? 'border-electric bg-blue-50/20 text-slate-primary shadow-neon-teal ring-1 ring-electric/10'
+                        : 'border-slate-200 bg-slate-50/50 hover:bg-slate-50 text-slate-secondary'
+                    }`}
+                  >
+                    <div className={`p-3 rounded-lg border transition-colors ${
+                      isActive ? 'bg-blue-50 border-blue-200 text-electric' : 'bg-white border-slate-200 text-slate-muted'
+                    }`}>
+                      <TabIcon className="w-5 h-5" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <span className="font-display font-bold text-sm block text-slate-primary">{tab.label}</span>
+                      <span className="text-[11px] text-slate-muted block mt-0.5 leading-normal">{tab.desc}</span>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
 
-            {/* Right Column: Live Interactive Simulator Panel */}
+            {/* Right Column: Live Telemetry Simulator Panel */}
             <div className="lg:col-span-7 flex flex-col justify-stretch">
-              <div className="bg-white/80 border border-white/60 backdrop-blur-xl rounded-xl p-6 shadow-cyber-card flex flex-col justify-between h-full hover:shadow-neon-orange transition-all duration-300">
+              <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-cyber-card flex flex-col justify-between h-full hover:shadow-neon-orange transition-all duration-300 text-white relative">
                 
-                <div className="flex justify-between items-center border-b border-slate-100 pb-4 mb-6">
+                <div className="flex justify-between items-center border-b border-slate-800 pb-4 mb-6">
                   <div className="flex items-center space-x-2">
                     <span className="relative flex h-2 w-2">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-safety-orange"></span>
                     </span>
-                    <span className="font-display text-sm sm:text-base font-extrabold text-slate-primary uppercase tracking-wide">
+                    <span className="font-display text-sm sm:text-base font-extrabold text-white uppercase tracking-wide">
                       {activePillar === 'asset' && 'Pillar 1: Interactive Asset Hub'}
                       {activePillar === 'work_order' && 'Pillar 2: Interactive Dispatch Board'}
                       {activePillar === 'preventive' && 'Pillar 3: PM Scheduler Simulator'}
@@ -739,7 +699,7 @@ export default function LandingPage() {
                 {activePillar === 'asset' && (
                   <div className="space-y-6 flex-1 flex flex-col justify-between">
                     <div>
-                      <p className="text-sm sm:text-base text-slate-secondary mb-6 leading-relaxed">
+                      <p className="text-sm text-slate-300 mb-6 leading-relaxed">
                         Tap on a high-value asset inside the telemetry queue to verify hierarchy tree logs, warranty files, and database records in real-time.
                       </p>
                       
@@ -755,20 +715,20 @@ export default function LandingPage() {
                             onClick={() => setSelectedAssetId(asset.id)}
                             className={`p-3.5 rounded-lg border text-left transition-all ${
                               selectedAssetId === asset.id
-                                ? 'bg-orange-50/50 border-safety-orange shadow-sm font-semibold'
-                                : 'bg-slate-50 border-slate-200 hover:border-slate-300'
+                                ? 'bg-orange-950/20 border-safety-orange shadow-sm font-semibold'
+                                : 'bg-slate-950 border-slate-800 hover:border-slate-700'
                             }`}
                           >
-                            <span className="font-mono text-[10px] block text-slate-muted font-bold">{asset.id}</span>
-                            <span className="font-display text-xs text-slate-primary block truncate font-bold mt-0.5">{asset.name}</span>
-                            <span className="font-mono text-[10px] text-emerald-600 block mt-1.5 font-bold">Health: {asset.health}</span>
+                            <span className="font-mono text-[10px] block text-slate-400 font-bold">{asset.id}</span>
+                            <span className="font-display text-xs text-white block truncate font-bold mt-0.5">{asset.name}</span>
+                            <span className="font-mono text-[10px] text-emerald-400 block mt-1.5 font-bold">Health: {asset.health}</span>
                           </button>
                         ))}
                       </div>
 
                       {/* Expanded Asset Details */}
-                      <div className="bg-slate-950 border border-slate-900 rounded-lg p-4 font-mono text-xs text-slate-300 space-y-2">
-                        <div className="flex justify-between border-b border-slate-900 pb-2 text-[10px] text-slate-400 font-bold uppercase">
+                      <div className="bg-slate-950 border border-slate-800 rounded-lg p-4 font-mono text-xs text-slate-300 space-y-2">
+                        <div className="flex justify-between border-b border-slate-850 pb-2 text-[10px] text-slate-400 font-bold uppercase">
                           <span>Hierarchy Record</span>
                           <span className="text-safety-orange">WARRANTY COMPLIANT</span>
                         </div>
@@ -778,18 +738,18 @@ export default function LandingPage() {
                           <div><span className="text-slate-500">Warranty Expires:</span> <span className="text-white font-semibold">2028-12-15</span></div>
                           <div><span className="text-slate-500">Service Coverage:</span> <span className="text-white font-semibold">Full Onsite SRE</span></div>
                         </div>
-                        <div className="pt-2 border-t border-slate-900 text-[10px] flex items-center space-x-1.5">
-                          <span className="inline-block w-1.5 h-1.5 bg-emerald-400 rounded-full" />
+                        <div className="pt-2 border-t border-slate-850 text-[10px] flex items-center space-x-1.5">
+                          <span className="inline-block w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
                           <span className="text-slate-400">Digital twin synchronization: Connected (SQLite sync OK)</span>
                         </div>
                       </div>
                     </div>
 
                     {/* QR SCAN BUTTON */}
-                    <div className="mt-6 pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="mt-6 pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
                       <div className="text-left font-mono">
-                        <span className="text-[10px] text-slate-muted block">QR SCANNED TRANSACTION POOL</span>
-                        <span className="text-base font-bold text-slate-primary font-mono">{qrScannedCount} mobile scans verified</span>
+                        <span className="text-[10px] text-slate-400 block">QR SCANNED TRANSACTION POOL</span>
+                        <span className="text-base font-bold text-white font-mono">{qrScannedCount} mobile scans verified</span>
                       </div>
                       
                       <button
@@ -807,7 +767,7 @@ export default function LandingPage() {
                 {activePillar === 'work_order' && (
                   <div className="space-y-6 flex-1 flex flex-col justify-between">
                     <div>
-                      <p className="text-sm sm:text-base text-slate-secondary mb-6 leading-relaxed">
+                      <p className="text-sm text-slate-300 mb-6 leading-relaxed">
                         Track status flows from Open to Closed in real-time. Tap column cards to cycle this simulated Preventive Work Order (WO-2941) through technician workflows.
                       </p>
 
@@ -819,17 +779,17 @@ export default function LandingPage() {
                             onClick={() => setWoStatusDemo(status)}
                             className={`p-3.5 rounded-lg border text-center transition-all ${
                               woStatusDemo === status
-                                ? 'bg-orange-50/50 border-safety-orange shadow-sm font-semibold'
-                                : 'bg-slate-50 border-slate-200 hover:border-slate-300'
+                                ? 'bg-orange-950/20 border-safety-orange shadow-sm font-semibold'
+                                : 'bg-slate-950 border-slate-800 hover:border-slate-700'
                             }`}
                           >
                             <div className="flex items-center justify-center space-x-1.5">
                               <span className={`w-1.5 h-1.5 rounded-full ${
                                 status === 'Open' ? 'bg-amber-400' : status === 'In Progress' ? 'bg-safety-orange animate-pulse' : 'bg-emerald-400'
                               }`} />
-                              <span className="font-display text-xs text-slate-primary font-bold">{status}</span>
+                              <span className="font-display text-xs text-white font-bold">{status}</span>
                             </div>
-                            <span className="text-[10px] text-slate-muted block mt-1">
+                            <span className="text-[10px] text-slate-400 block mt-1">
                               {status === 'Open' ? '1 pending' : status === 'In Progress' ? 'Active now' : 'Archived'}
                             </span>
                           </button>
@@ -838,7 +798,7 @@ export default function LandingPage() {
 
                       {/* Work Order Details Card */}
                       <div className="bg-slate-950 border border-slate-800 rounded-lg p-4 font-mono text-xs text-slate-300 space-y-2">
-                        <div className="flex justify-between border-b border-slate-900 pb-2 text-[10px] text-slate-400 font-bold uppercase">
+                        <div className="flex justify-between border-b border-slate-850 pb-2 text-[10px] text-slate-400 font-bold uppercase">
                           <span>Work Ticket ID</span>
                           <span className="text-safety-orange">PRIORITY: HIGH</span>
                         </div>
@@ -847,7 +807,7 @@ export default function LandingPage() {
                         <div className="text-[11px]"><span className="text-slate-500">Assignee:</span> <span className="text-white">T. Vance (Senior Field Tech)</span></div>
                         <div className="text-[11px]"><span className="text-slate-500">Time Log:</span> <span className="text-white">2 hours 45 mins logged</span></div>
                         
-                        <div className="pt-2 border-t border-slate-900 text-[10px] text-slate-400 flex items-center justify-between">
+                        <div className="pt-2 border-t border-slate-850 text-[10px] text-slate-400 flex items-center justify-between">
                           <span>Status Flow: {woStatusDemo === 'Open' ? '📋 DISPATCHED TO MOBILE' : woStatusDemo === 'In Progress' ? '⚙️ REPAIR IN PROGRESS' : '✓ REPAIR AUDITED & SIGNED'}</span>
                           <span className="font-bold text-white">{woStatusDemo === 'Closed' ? '100% DONE' : 'WAITING'}</span>
                         </div>
@@ -855,10 +815,10 @@ export default function LandingPage() {
                     </div>
 
                     {/* Cycle status controls */}
-                    <div className="mt-6 pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="mt-6 pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
                       <div className="text-left font-mono">
-                        <span className="text-[10px] text-slate-muted block">AUDIT TRAIL COMPLIANCE</span>
-                        <span className="text-xs text-slate-primary font-bold">Time card logged automatically</span>
+                        <span className="text-[10px] text-slate-400 block">AUDIT TRAIL COMPLIANCE</span>
+                        <span className="text-xs text-slate-200 font-bold">Time card logged automatically</span>
                       </div>
                       
                       <button
@@ -870,7 +830,7 @@ export default function LandingPage() {
                           };
                           setWoStatusDemo(nextStatus[woStatusDemo]);
                         }}
-                        className="bg-slate-900 text-white hover:bg-slate-800 px-5 py-3 rounded-lg text-xs font-display font-bold tracking-wider transition-all duration-300 flex items-center space-x-2 active:scale-[0.98]"
+                        className="bg-slate-850 text-white hover:bg-slate-800 px-5 py-3 rounded-lg text-xs font-display font-bold tracking-wider transition-all duration-300 flex items-center space-x-2 active:scale-[0.98]"
                       >
                         <Icons.Refresh className="w-4 h-4 text-white animate-spin-slow" />
                         <span>CYCLE WORK STATUS</span>
@@ -883,14 +843,14 @@ export default function LandingPage() {
                 {activePillar === 'preventive' && (
                   <div className="space-y-6 flex-1 flex flex-col justify-between">
                     <div>
-                      <p className="text-sm sm:text-base text-slate-secondary mb-6 leading-relaxed">
+                      <p className="text-sm text-slate-300 mb-6 leading-relaxed">
                         Set automated preventive intervals below. IronFlow automatically dispatches a secure work order and safety checklists as soon as the scheduled interval is reached.
                       </p>
 
                       {/* Slider Selector */}
-                      <div className="space-y-3 bg-slate-50 border border-slate-200/80 rounded-xl p-4.5 mb-4 shadow-inner">
+                      <div className="space-y-3 bg-slate-950 border border-slate-800 rounded-xl p-4.5 mb-4 shadow-inner">
                         <div className="flex justify-between items-center text-xs font-mono">
-                          <span className="text-slate-secondary font-semibold">Set Preventive Trigger Interval</span>
+                          <span className="text-slate-400 font-semibold">Set Preventive Trigger Interval</span>
                           <span className="text-safety-orange font-bold font-mono">{pmIntervalDays} Days</span>
                         </div>
                         
@@ -900,10 +860,10 @@ export default function LandingPage() {
                           max="90"
                           value={pmIntervalDays}
                           onChange={(e) => setPmIntervalDays(Number(e.target.value))}
-                          className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-safety-orange"
+                          className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-safety-orange"
                         />
                         
-                        <div className="flex justify-between text-[9px] font-mono text-slate-muted">
+                        <div className="flex justify-between text-[9px] font-mono text-slate-500">
                           <span>7d (Critical)</span>
                           <span>30d (Monthly)</span>
                           <span>60d (Bi-Monthly)</span>
@@ -912,8 +872,8 @@ export default function LandingPage() {
                       </div>
 
                       {/* Automated Work Order Output details */}
-                      <div className="bg-slate-950 border border-slate-900 rounded-lg p-4 font-mono text-xs text-slate-300 space-y-2">
-                        <div className="flex justify-between border-b border-slate-900 pb-2 text-[10px] text-slate-400 font-bold uppercase">
+                      <div className="bg-slate-950 border border-slate-805 rounded-lg p-4 font-mono text-xs text-slate-300 space-y-2">
+                        <div className="flex justify-between border-b border-slate-850 pb-2 text-[10px] text-slate-400 font-bold uppercase">
                           <span>Auto-scheduler Status</span>
                           <span className="text-emerald-400">SCHEDULER RUNNING</span>
                         </div>
@@ -925,10 +885,10 @@ export default function LandingPage() {
                     </div>
 
                     {/* Automation Trigger Buttons */}
-                    <div className="mt-6 pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="mt-6 pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
                       <div className="text-left font-mono">
-                        <span className="text-[10px] text-slate-muted block">COMPLIANCE CRON MONITOR</span>
-                        <span className="text-xs text-slate-primary font-bold">Autogen state: Active & Validated</span>
+                        <span className="text-[10px] text-slate-400 block">COMPLIANCE CRON MONITOR</span>
+                        <span className="text-xs text-slate-200 font-bold">Autogen state: Active & Validated</span>
                       </div>
                       
                       <button
@@ -956,16 +916,16 @@ export default function LandingPage() {
                 {activePillar === 'reports' && (
                   <div className="space-y-6 flex-1 flex flex-col justify-between">
                     <div>
-                      <p className="text-sm sm:text-base text-slate-secondary mb-6 leading-relaxed">
+                      <p className="text-sm text-slate-300 mb-6 leading-relaxed">
                         Uncover exactly how much your organization saves with IronFlow. Drag the sliders below to adjust your hourly downtime cost and yearly hours saved.
                       </p>
 
                       <div className="space-y-4 mb-4">
                         {/* Slider 1: Hourly Downtime Cost */}
-                        <div className="space-y-2 bg-slate-50 border border-slate-200/80 rounded-xl p-3.5 shadow-inner">
+                        <div className="space-y-2 bg-slate-950 border border-slate-800 rounded-xl p-3.5 shadow-inner">
                           <div className="flex justify-between items-center text-xs font-mono">
-                            <span className="text-slate-secondary font-semibold">Hourly Downtime Cost</span>
-                            <span className="text-slate-primary font-bold font-mono">${hourlyDowntimeCost.toLocaleString()}/hr</span>
+                            <span className="text-slate-400 font-semibold">Hourly Downtime Cost</span>
+                            <span className="text-white font-bold font-mono">${hourlyDowntimeCost.toLocaleString()}/hr</span>
                           </div>
                           <input
                             type="range"
@@ -974,9 +934,9 @@ export default function LandingPage() {
                             step="500"
                             value={hourlyDowntimeCost}
                             onChange={(e) => setHourlyDowntimeCost(Number(e.target.value))}
-                            className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-electric"
+                            className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-electric"
                           />
-                          <div className="flex justify-between text-[9px] font-mono text-slate-muted">
+                          <div className="flex justify-between text-[9px] font-mono text-slate-500">
                             <span>$1,000/hr</span>
                             <span>$10,000/hr</span>
                             <span>$20,000/hr</span>
@@ -984,10 +944,10 @@ export default function LandingPage() {
                         </div>
 
                         {/* Slider 2: Hours Saved */}
-                        <div className="space-y-2 bg-slate-50 border border-slate-200/80 rounded-xl p-3.5 shadow-inner">
+                        <div className="space-y-2 bg-slate-950 border border-slate-800 rounded-xl p-3.5 shadow-inner">
                           <div className="flex justify-between items-center text-xs font-mono">
-                            <span className="text-slate-secondary font-semibold">Downtime Reduced Per Year</span>
-                            <span className="text-slate-primary font-bold font-mono">{downtimeHoursReduced} Hours</span>
+                            <span className="text-slate-400 font-semibold">Downtime Reduced Per Year</span>
+                            <span className="text-white font-bold font-mono">{downtimeHoursReduced} Hours</span>
                           </div>
                           <input
                             type="range"
@@ -995,9 +955,9 @@ export default function LandingPage() {
                             max="50"
                             value={downtimeHoursReduced}
                             onChange={(e) => setDowntimeHoursReduced(Number(e.target.value))}
-                            className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-electric"
+                            className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-electric"
                           />
-                          <div className="flex justify-between text-[9px] font-mono text-slate-muted">
+                          <div className="flex justify-between text-[9px] font-mono text-slate-500">
                             <span>1 hr</span>
                             <span>25 hrs</span>
                             <span>50 hrs</span>
@@ -1006,7 +966,7 @@ export default function LandingPage() {
                       </div>
 
                       {/* ROI Result Readout */}
-                      <div className="bg-slate-950 border border-slate-900 rounded-lg p-4 font-mono text-xs text-slate-300 space-y-2 text-center">
+                      <div className="bg-slate-950 border border-slate-800 rounded-lg p-4 font-mono text-xs text-slate-300 space-y-2 text-center">
                         <div className="text-[10px] text-slate-400 font-bold uppercase mb-1">
                           Calculated Financial Return on Investment
                         </div>
@@ -1020,10 +980,10 @@ export default function LandingPage() {
                     </div>
 
                     {/* Footer for ROI */}
-                    <div className="mt-6 pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="mt-6 pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
                       <div className="text-left font-mono">
-                        <span className="text-[10px] text-slate-muted block">PREDICTIVE ANALYTICS ENGINE</span>
-                        <span className="text-xs text-emerald-600 font-bold font-mono">✓ PM Uptime compliance rate: 100%</span>
+                        <span className="text-[10px] text-slate-400 block">PREDICTIVE ANALYTICS ENGINE</span>
+                        <span className="text-xs text-emerald-400 font-bold font-mono">✓ PM Uptime compliance rate: 100%</span>
                       </div>
                       
                       <a
@@ -1045,42 +1005,42 @@ export default function LandingPage() {
       </section>
 
       {/* ============================================================================
-          "BUILT FOR YOUR TEAM" BENEFITS SECTION (Brand Identity / Competitor Killer)
+          "BUILT FOR INDUSTRIAL TEAMS" BENEFITS SECTION
           ============================================================================ */}
       <section id="team" className="py-24 md:py-32 relative border-t border-slate-200/80 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           
           <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
-            <h2 className="text-xs font-mono font-bold tracking-widest text-safety-orange uppercase">BUILT FOR YOUR TEAM</h2>
+            <h2 className="text-xs font-mono font-bold tracking-widest text-safety-orange uppercase">BUILT FOR INDUSTRIAL TEAMS</h2>
             <p className="text-3xl sm:text-4xl font-display font-extrabold tracking-tight text-slate-primary">
-              Empower Field Teams, Engineers, and Managers
+              BUILT FOR INDUSTRIAL TEAMS
             </p>
             <p className="text-slate-secondary text-base max-w-xl mx-auto">
-              IronFlow is crafted explicitly to handle complex, rugged environments without requiring months of training or painful integrations.
+              Powerful for operations. Simple for everyone.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               {
-                title: 'Easy to Use on Any Device',
-                desc: 'Responsive, tactile, mobile-first design built for smartphones, industrial tablets, or central desktop rigs.',
+                title: 'ANY DEVICE',
+                desc: 'Access anywhere on any device.',
                 icon: Icons.Logo
               },
               {
-                title: 'Role-Based Access',
-                desc: 'Configure fine-grained read/write security permissions easily for administrators, safety officers, and field technicians.',
+                title: 'ROLE-BASED ACCESS',
+                desc: 'Right data. Right people.',
                 icon: Icons.Users
               },
               {
-                title: 'Scalable as You Grow',
-                desc: 'Efficient database structures easily handle fleets scaling from 1,000 up to 100,000+ active assets without performance degradation.',
-                icon: Icons.Chart
+                title: 'SECURE & CLOUD-BASED',
+                desc: 'Enterprise-grade security.',
+                icon: Icons.Shield
               },
               {
-                title: 'Secure & Cloud-Based',
-                desc: 'End-to-end TLS 1.3 encryption, automatic SQLite data sync failover protection, and SOC2 certified database architectures.',
-                icon: Icons.Shield
+                title: 'SCALABLE AS YOU GROW',
+                desc: 'Built to grow with your operation.',
+                icon: Icons.Chart
               }
             ].map((claim, idx) => {
               const ClaimIcon = claim.icon;
@@ -1645,12 +1605,12 @@ export default function LandingPage() {
               <div className="flex items-center space-x-2">
                 <Icons.Logo />
                 <div className="flex flex-col">
-                  <span className="font-display font-bold text-base tracking-tight text-slate-primary">IronFlow Softwares</span>
+                  <span className="font-display font-bold text-base tracking-tight text-slate-primary">IronFlow Software</span>
                   <span className="text-[10px] font-sans tracking-widest text-safety-orange font-bold uppercase -mt-0.5">Keep Everything Running.</span>
                 </div>
               </div>
               <p className="text-slate-muted text-center md:text-left mt-1">
-                © {new Date().getFullYear()} IronFlow Softwares. All rights reserved. Deployed via Edge Core Node.
+                © {new Date().getFullYear()} IronFlow Software. All rights reserved. Deployed via Edge Core Node.
               </p>
             </div>
 

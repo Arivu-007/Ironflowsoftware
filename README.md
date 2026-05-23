@@ -1,4 +1,4 @@
-# IronFlow Softwares
+# IronFlow Software
 
 Precision RFID asset management and real-time inventory telemetry pipelines engineered for demanding environments.
 
