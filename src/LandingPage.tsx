@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useMemo } from 'react';
+import { motion } from 'framer-motion';
 
 // ============================================================================
 // INLINE CUSTOM GEOMETRIC SVG ICONS (Ensures compile safety & zero-dependency)
@@ -251,22 +251,6 @@ export default function LandingPage() {
   const [assetVolume, setAssetVolume] = useState<string>('1k_10k');
   const [environmentProfile, setEnvironmentProfile] = useState<string>('zone_1');
   const [formStep, setFormStep] = useState<'idle' | 'verifying' | 'allocating' | 'success'>('idle');
-  const [isBrochureOpen, setIsBrochureOpen] = useState<boolean>(false);
-
-  // ============================================================================
-  // SIDE EFFECTS (Simulated background dashboard activity)
-  // ============================================================================
-
-  // Listen for escape key press to close brochure modal
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setIsBrochureOpen(false);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
 
   const triggerScheduleAlert = () => {
     setIsSchedulingAlert(true);
@@ -312,8 +296,8 @@ export default function LandingPage() {
           <div className="flex items-center space-x-3">
             <Icons.Logo />
             <div className="flex flex-col">
-              <span className="font-display font-bold text-2xl tracking-tight text-slate-primary">IronFlow</span>
-              <span className="text-[9px] font-mono tracking-widest text-electric font-bold uppercase -mt-0.5">SOFTWARE</span>
+              <span className="font-display font-bold text-2xl tracking-tight text-slate-primary">IronFlow Software</span>
+              <span className="text-[9px] font-mono tracking-widest text-safety-orange font-bold uppercase -mt-0.5">Keep Everything Running.</span>
             </div>
           </div>
 
@@ -346,7 +330,7 @@ export default function LandingPage() {
               <span className="font-bold uppercase tracking-wider">Mobile-First Maintenance Management</span>
             </div>
             
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-display font-extrabold tracking-tight text-slate-primary leading-tight uppercase">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold tracking-tight text-slate-primary leading-[1.1] uppercase">
               Reduce Downtime.<br />
               Simplify Maintenance.<br />
               <span className="text-safety-orange bg-gradient-to-r from-orange-600 via-safety-orange to-amber-500 bg-clip-text text-transparent">Complete Maintenance & Asset Management.</span>
@@ -357,48 +341,131 @@ export default function LandingPage() {
             </p>
  
             <div className="flex flex-col sm:flex-row gap-4 pt-2">
-              <a 
-                href="#features" 
+              <a
+                href="#features"
                 className="bg-gradient-to-r from-safety-orange via-orange-600 to-amber-500 text-white px-8 py-4 rounded text-sm font-display font-bold tracking-wider text-center transition-all duration-300 shadow-neon-orange-intense hover:-translate-y-0.5 active:scale-[0.98]"
               >
                 EXPLORE SYSTEM CAPABILITIES
               </a>
-              <button 
-                onClick={() => setIsBrochureOpen(true)}
-                className="border border-slate-200 bg-white hover:border-slate-400 px-8 py-4 rounded text-sm font-display font-bold text-slate-secondary hover:text-slate-primary text-center transition-all duration-300 shadow-sm flex items-center justify-center space-x-2"
+              <a
+                href="#demo"
+                className="border border-slate-200 bg-white hover:border-electric/40 hover:bg-blue-50/30 px-8 py-4 rounded text-sm font-display font-bold text-slate-secondary hover:text-electric text-center transition-all duration-300 shadow-sm flex items-center justify-center space-x-2"
               >
-                <Icons.Globe className="w-4 h-4 text-safety-orange" />
-                <span>VIEW CORPORATE BROCHURE</span>
-              </button>
+                <Icons.Monitor className="w-4 h-4 text-electric" />
+                <span>REQUEST LIVE DEMO</span>
+              </a>
             </div>
           </div>
  
-          {/* Hero Right: Brochure Preview Image & Fullscreen Lightbox Trigger */}
+          {/* Hero Right: Live Dashboard UI Mockup */}
           <div className="lg:col-span-6 flex flex-col justify-center items-center lg:items-end">
-            <button
-              onClick={() => setIsBrochureOpen(true)}
-              className="group relative max-w-md w-full bg-white border border-slate-200/80 rounded-2xl p-3 shadow-cyber-card hover:shadow-neon-orange hover:border-orange-200/60 hover:-translate-y-1 transition-all duration-500 cursor-pointer overflow-hidden animate-fade-in"
-            >
-              {/* Luminous overlay effect */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-orange-400/5 via-transparent to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              
-              <div className="relative rounded-xl overflow-hidden border border-slate-100 bg-slate-50 flex items-center justify-center">
-                <img 
-                  src="/brochure.jpg" 
-                  alt="IronFlow Software Corporate Brochure Preview" 
-                  className="w-full h-auto object-cover max-h-[460px] group-hover:scale-[1.01] transition-transform duration-500"
-                />
-                
-                {/* Overlay Hover Badge */}
-                <div className="absolute inset-0 bg-slate-950/20 backdrop-blur-[1px] opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
-                  <span className="bg-slate-900/90 text-white border border-slate-700 px-5 py-2.5 rounded-full font-display font-bold text-xs tracking-wider uppercase shadow-[0_0_15px_rgba(249,115,22,0.3)]">
-                    🔍 View Fullscreen Brochure
-                  </span>
+            <div className="w-full max-w-lg bg-white border border-slate-200/80 rounded-2xl shadow-cyber-card overflow-hidden hover:shadow-neon-teal hover:-translate-y-1 transition-all duration-500">
+
+              {/* Browser chrome */}
+              <div className="bg-slate-100 border-b border-slate-200 px-4 py-2.5 flex items-center space-x-3">
+                <div className="flex space-x-1.5 shrink-0">
+                  <span className="w-2.5 h-2.5 rounded-full bg-red-400/80" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-400/80" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400/80" />
+                </div>
+                <div className="flex-1 bg-white border border-slate-200 rounded px-3 py-1 flex items-center space-x-2">
+                  <Icons.Shield className="w-3 h-3 text-emerald-500 shrink-0" />
+                  <span className="text-[10px] font-mono text-slate-400 truncate">app.ironflowsoftware.com/dashboard</span>
                 </div>
               </div>
-            </button>
-            <p className="text-[11px] font-mono text-slate-muted mt-3 text-center lg:text-right w-full max-w-md pr-2">
-              ★ Click brochure flyer to open high-resolution interactive lightbox viewer
+
+              {/* Dashboard layout */}
+              <div className="flex bg-slate-50" style={{ minHeight: '400px' }}>
+
+                {/* Sidebar */}
+                <div className="w-11 bg-slate-900 flex flex-col items-center py-4 gap-3 shrink-0">
+                  <div className="p-1.5 rounded-lg bg-electric/20 text-electric"><Icons.Chart className="w-4 h-4" /></div>
+                  <div className="p-1.5 rounded-lg text-slate-600"><Icons.Asset className="w-4 h-4" /></div>
+                  <div className="p-1.5 rounded-lg text-slate-600"><Icons.Calendar className="w-4 h-4" /></div>
+                  <div className="p-1.5 rounded-lg text-slate-600"><Icons.Wrench className="w-4 h-4" /></div>
+                  <div className="p-1.5 rounded-lg text-slate-600"><Icons.Users className="w-4 h-4" /></div>
+                </div>
+
+                {/* Main content */}
+                <div className="flex-1 p-4 space-y-3 overflow-hidden">
+
+                  {/* Header */}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-sm font-display font-bold text-slate-primary">Operations Dashboard</h3>
+                      <p className="text-[10px] font-mono text-slate-muted">Gulf Platform · Real-time</p>
+                    </div>
+                    <div className="flex items-center space-x-1.5 bg-emerald-50 border border-emerald-200 px-2 py-1 rounded-full">
+                      <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                      <span className="text-[9px] font-mono text-emerald-700 font-bold">LIVE</span>
+                    </div>
+                  </div>
+
+                  {/* KPI cards */}
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { label: 'Active Assets', value: '1,402', color: 'text-electric', bg: 'bg-blue-50 border-blue-100' },
+                      { label: 'Work Orders', value: '24', color: 'text-safety-orange', bg: 'bg-orange-50 border-orange-100' },
+                      { label: 'PM Compliance', value: '100%', color: 'text-emerald-600', bg: 'bg-emerald-50 border-emerald-100' },
+                    ].map((kpi) => (
+                      <div key={kpi.label} className={`${kpi.bg} border rounded-lg p-2.5`}>
+                        <div className={`text-base font-display font-extrabold ${kpi.color}`}>{kpi.value}</div>
+                        <div className="text-[9px] text-slate-secondary font-mono mt-0.5 leading-tight">{kpi.label}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Asset health list */}
+                  <div className="bg-white border border-slate-200 rounded-lg overflow-hidden">
+                    <div className="px-3 py-1.5 border-b border-slate-100 flex items-center justify-between bg-slate-50/80">
+                      <span className="text-[10px] font-mono font-bold text-slate-primary uppercase tracking-wide">Asset Health Monitor</span>
+                      <span className="text-[9px] font-mono text-electric font-bold">VIEW ALL</span>
+                    </div>
+                    {[
+                      { id: 'BOP-01', name: 'Subsea Blowout Preventer', health: 98, dot: 'bg-emerald-500' },
+                      { id: 'GEN-02', name: 'Power Generator B', health: 100, dot: 'bg-emerald-500' },
+                      { id: 'PMP-04', name: 'Mud Reciprocator #4B', health: 92, dot: 'bg-amber-400' },
+                    ].map((asset, idx) => (
+                      <div key={asset.id} className={`px-3 py-2 flex items-center gap-2.5 ${idx < 2 ? 'border-b border-slate-100' : ''}`}>
+                        <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${asset.dot}`} />
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-mono text-slate-400">{asset.id}</span>
+                            <span className="text-[10px] font-mono font-bold text-slate-primary">{asset.health}%</span>
+                          </div>
+                          <div className="mt-0.5 h-1 bg-slate-100 rounded-full overflow-hidden">
+                            <div
+                              className={`h-full rounded-full transition-all ${asset.health >= 95 ? 'bg-emerald-400' : 'bg-amber-400'}`}
+                              style={{ width: `${asset.health}%` }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Active work order */}
+                  <div className="bg-white border border-slate-200 rounded-lg p-3 flex items-center gap-3">
+                    <div className="bg-orange-50 text-safety-orange border border-orange-100 p-2 rounded-lg shrink-0">
+                      <Icons.Wrench className="w-4 h-4" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-[11px] font-display font-bold text-slate-primary truncate">WO-2941: Valve Calibration</span>
+                        <span className="text-[9px] font-mono bg-orange-50 text-safety-orange border border-orange-200 px-1.5 py-0.5 rounded shrink-0">IN PROGRESS</span>
+                      </div>
+                      <div className="mt-1.5 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-full w-[65%] bg-gradient-to-r from-safety-orange to-amber-400 rounded-full" />
+                      </div>
+                      <p className="text-[9px] text-slate-muted mt-1 font-mono">T. Vance · 2h 45m logged</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <p className="text-[11px] font-mono text-slate-muted mt-3 text-center lg:text-right w-full max-w-lg">
+              ★ Real-time asset health, work orders, and PM compliance — all in one view
             </p>
           </div>
 
@@ -423,7 +490,7 @@ export default function LandingPage() {
                 <Icons.Clock className="w-5 h-5" />
               </div>
               <h4 className="font-display font-extrabold text-xs text-slate-primary uppercase tracking-wider">Reduce Downtime</h4>
-              <p className="text-[11px] text-slate-secondary mt-2 leading-relaxed">Prevent failures before they happen.</p>
+              <p className="text-xs text-slate-secondary mt-2 leading-relaxed">Prevent failures before they happen.</p>
             </div>
 
             {/* Pillar 2 */}
@@ -432,7 +499,7 @@ export default function LandingPage() {
                 <Icons.Wrench className="w-5 h-5" />
               </div>
               <h4 className="font-display font-extrabold text-xs text-slate-primary uppercase tracking-wider">Keep Techs Efficient</h4>
-              <p className="text-[11px] text-slate-secondary mt-2 leading-relaxed">Mobile tools that techs love to use.</p>
+              <p className="text-xs text-slate-secondary mt-2 leading-relaxed">Mobile tools that techs love to use.</p>
             </div>
 
             {/* Pillar 3 */}
@@ -441,7 +508,7 @@ export default function LandingPage() {
                 <Icons.Shield className="w-5 h-5" />
               </div>
               <h4 className="font-display font-extrabold text-xs text-slate-primary uppercase tracking-wider">Stay Compliant</h4>
-              <p className="text-[11px] text-slate-secondary mt-2 leading-relaxed">Auto-store every record for audits.</p>
+              <p className="text-xs text-slate-secondary mt-2 leading-relaxed">Auto-store every record for audits.</p>
             </div>
 
             {/* Pillar 4 */}
@@ -450,7 +517,7 @@ export default function LandingPage() {
                 <Icons.Monitor className="w-5 h-5" />
               </div>
               <h4 className="font-display font-extrabold text-xs text-slate-primary uppercase tracking-wider">Gain Visibility</h4>
-              <p className="text-[11px] text-slate-secondary mt-2 leading-relaxed">Know what's happening. Anytime. Anywhere.</p>
+              <p className="text-xs text-slate-secondary mt-2 leading-relaxed">Know what's happening. Anytime. Anywhere.</p>
             </div>
 
             {/* Pillar 5 */}
@@ -459,7 +526,7 @@ export default function LandingPage() {
                 <Icons.Dollar className="w-5 h-5" />
               </div>
               <h4 className="font-display font-extrabold text-xs text-slate-primary uppercase tracking-wider">Lower Costs & Waste</h4>
-              <p className="text-[11px] text-slate-secondary mt-2 leading-relaxed">Extend asset life. Improve ROI.</p>
+              <p className="text-xs text-slate-secondary mt-2 leading-relaxed">Extend asset life. Improve ROI.</p>
             </div>
 
           </div>
@@ -469,6 +536,21 @@ export default function LandingPage() {
             <span>One System.</span>
             <span className="text-electric-blue">All Your Assets.</span>
             <span className="text-safety-orange">Total Control.</span>
+          </div>
+
+          {/* Key Metrics Strip */}
+          <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-5">
+            {[
+              { value: '1,400+', label: 'Active Assets Monitored', color: 'text-electric' },
+              { value: '100%', label: 'PM Compliance Rate', color: 'text-safety-orange' },
+              { value: '$84K+', label: 'Monthly Savings Per Client', color: 'text-electric-indigo' },
+              { value: '42 min', label: 'Avg Work Order Resolution', color: 'text-electric-blue' }
+            ].map((stat, idx) => (
+              <div key={idx} className="bg-white border border-slate-200/80 rounded-xl p-5 text-center shadow-sm hover:shadow-neon-teal hover:-translate-y-0.5 transition-all duration-300">
+                <div className={`text-2xl sm:text-3xl font-display font-extrabold ${stat.color} mb-1.5 tracking-tight`}>{stat.value}</div>
+                <div className="text-[11px] text-slate-secondary font-mono uppercase tracking-wider leading-snug">{stat.label}</div>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -517,7 +599,7 @@ export default function LandingPage() {
                     </div>
                     <div>
                       <strong className="text-slate-primary font-bold">{bullet.t}</strong>
-                      <span className="text-slate-secondary block text-[11px] mt-0.5">{bullet.d}</span>
+                      <span className="text-slate-secondary block text-xs mt-0.5 leading-relaxed">{bullet.d}</span>
                     </div>
                   </li>
                 ))}
@@ -548,7 +630,7 @@ export default function LandingPage() {
                     </div>
                     <div>
                       <strong className="text-slate-primary font-bold">{bullet.t}</strong>
-                      <span className="text-slate-secondary block text-[11px] mt-0.5">{bullet.d}</span>
+                      <span className="text-slate-secondary block text-xs mt-0.5 leading-relaxed">{bullet.d}</span>
                     </div>
                   </li>
                 ))}
@@ -579,7 +661,7 @@ export default function LandingPage() {
                     </div>
                     <div>
                       <strong className="text-slate-primary font-bold">{bullet.t}</strong>
-                      <span className="text-slate-secondary block text-[11px] mt-0.5">{bullet.d}</span>
+                      <span className="text-slate-secondary block text-xs mt-0.5 leading-relaxed">{bullet.d}</span>
                     </div>
                   </li>
                 ))}
@@ -610,7 +692,7 @@ export default function LandingPage() {
                     </div>
                     <div>
                       <strong className="text-slate-primary font-bold">{bullet.t}</strong>
-                      <span className="text-slate-secondary block text-[11px] mt-0.5">{bullet.d}</span>
+                      <span className="text-slate-secondary block text-xs mt-0.5 leading-relaxed">{bullet.d}</span>
                     </div>
                   </li>
                 ))}
@@ -655,21 +737,26 @@ export default function LandingPage() {
                   <button
                     key={tab.id}
                     onClick={() => setActivePillar(tab.id as any)}
-                    className={`w-full text-left p-4.5 rounded-xl border transition-all duration-300 flex items-start space-x-4 shadow-sm ${
+                    className={`w-full text-left p-5 rounded-xl border-y border-r transition-all duration-300 flex items-start space-x-4 shadow-sm ${
                       isActive
-                        ? 'border-electric bg-blue-50/20 text-slate-primary shadow-neon-teal ring-1 ring-electric/10'
-                        : 'border-slate-200 bg-slate-50/50 hover:bg-slate-50 text-slate-secondary'
+                        ? 'border-y-electric border-r-electric border-l-[3px] border-l-electric bg-blue-50/30 shadow-neon-teal'
+                        : 'border-slate-200 bg-white hover:bg-slate-50/80 text-slate-secondary'
                     }`}
                   >
-                    <div className={`p-3 rounded-lg border transition-colors ${
-                      isActive ? 'bg-blue-50 border-blue-200 text-electric' : 'bg-white border-slate-200 text-slate-muted'
+                    <div className={`p-3 rounded-lg border transition-colors shrink-0 ${
+                      isActive ? 'bg-blue-50 border-blue-200 text-electric' : 'bg-slate-50 border-slate-200 text-slate-muted'
                     }`}>
                       <TabIcon className="w-5 h-5" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <span className="font-display font-bold text-sm block text-slate-primary">{tab.label}</span>
-                      <span className="text-[11px] text-slate-muted block mt-0.5 leading-normal">{tab.desc}</span>
+                      <span className={`font-display font-bold text-sm block ${isActive ? 'text-electric' : 'text-slate-primary'}`}>{tab.label}</span>
+                      <span className="text-xs text-slate-muted block mt-0.5 leading-normal">{tab.desc}</span>
                     </div>
+                    {isActive && (
+                      <div className="shrink-0 mt-0.5">
+                        <span className="inline-block w-1.5 h-1.5 bg-electric rounded-full" />
+                      </div>
+                    )}
                   </button>
                 );
               })}
@@ -1013,10 +1100,10 @@ export default function LandingPage() {
           <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
             <h2 className="text-xs font-mono font-bold tracking-widest text-safety-orange uppercase">BUILT FOR INDUSTRIAL TEAMS</h2>
             <p className="text-3xl sm:text-4xl font-display font-extrabold tracking-tight text-slate-primary">
-              BUILT FOR INDUSTRIAL TEAMS
+              Powerful for Operations.<br className="hidden sm:block" /> Simple for Everyone.
             </p>
             <p className="text-slate-secondary text-base max-w-xl mx-auto">
-              Powerful for operations. Simple for everyone.
+              From offshore rigs to steel mills — IronFlow adapts to your team, your devices, and your scale.
             </p>
           </div>
 
@@ -1024,38 +1111,44 @@ export default function LandingPage() {
             {[
               {
                 title: 'ANY DEVICE',
-                desc: 'Access anywhere on any device.',
-                icon: Icons.Logo
+                desc: 'Access your full CMMS from desktop, tablet, or mobile — wherever your team is deployed in the field.',
+                icon: Icons.Monitor,
+                accent: 'border-t-electric',
+                iconBg: 'bg-blue-50 text-electric border-blue-100'
               },
               {
                 title: 'ROLE-BASED ACCESS',
-                desc: 'Right data. Right people.',
-                icon: Icons.Users
+                desc: 'Assign granular permissions so the right personnel see the right asset data at all times — no overexposure.',
+                icon: Icons.Users,
+                accent: 'border-t-safety-orange',
+                iconBg: 'bg-orange-50 text-safety-orange border-orange-100'
               },
               {
                 title: 'SECURE & CLOUD-BASED',
-                desc: 'Enterprise-grade security.',
-                icon: Icons.Shield
+                desc: 'AES-256 encryption, TLS 1.3, and tri-region cloud redundancy protect every maintenance record.',
+                icon: Icons.Shield,
+                accent: 'border-t-electric-indigo',
+                iconBg: 'bg-indigo-50 text-indigo-600 border-indigo-100'
               },
               {
                 title: 'SCALABLE AS YOU GROW',
-                desc: 'Built to grow with your operation.',
-                icon: Icons.Chart
+                desc: 'From 500 to 500,000+ assets — the platform scales with zero configuration overhead as operations expand.',
+                icon: Icons.Chart,
+                accent: 'border-t-electric-blue',
+                iconBg: 'bg-sky-50 text-sky-600 border-sky-100'
               }
             ].map((claim, idx) => {
               const ClaimIcon = claim.icon;
               return (
                 <div
                   key={idx}
-                  className="border border-slate-200/80 bg-slate-50/50 hover:bg-slate-50 hover:border-electric/30 hover:shadow-neon-teal transition-all duration-300 rounded-xl p-6 flex flex-col justify-between"
+                  className={`border border-slate-200/80 border-t-4 ${claim.accent} bg-white hover:shadow-neon-teal hover:-translate-y-1 transition-all duration-300 rounded-xl p-6 flex flex-col gap-4 shadow-sm`}
                 >
-                  <div className="space-y-4">
-                    <div className="bg-white text-electric border border-slate-200 p-3 rounded-lg w-fit shadow-sm">
-                      <ClaimIcon className="w-5 h-5" />
-                    </div>
-                    <h3 className="font-display font-bold text-base text-slate-primary">{claim.title}</h3>
-                    <p className="text-slate-secondary text-xs leading-relaxed">{claim.desc}</p>
+                  <div className={`${claim.iconBg} border p-3 rounded-lg w-fit shadow-sm`}>
+                    <ClaimIcon className="w-5 h-5" />
                   </div>
+                  <h3 className="font-display font-bold text-sm text-slate-primary uppercase tracking-wide">{claim.title}</h3>
+                  <p className="text-slate-secondary text-xs leading-relaxed">{claim.desc}</p>
                 </div>
               );
             })}
@@ -1195,7 +1288,7 @@ export default function LandingPage() {
               <div className="flex justify-between items-center border-b border-slate-100 pb-4 mb-6">
                 <div className="flex items-center space-x-2 font-mono text-xs">
                   <Icons.Server className="w-4 h-4 text-electric" />
-                  <span className="text-slate-primary font-bold">EDGE_DATABASE_SYNCRONIZER</span>
+                  <span className="text-slate-primary font-bold">EDGE_DATABASE_SYNCHRONIZER</span>
                 </div>
 
                 {/* Storm toggle */}
@@ -1408,31 +1501,7 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              {/* Brochure Preview Card */}
-              <div 
-                onClick={() => setIsBrochureOpen(true)}
-                className="group relative bg-slate-50 hover:bg-white border border-slate-200 hover:border-safety-orange/30 rounded-xl p-4 flex items-center space-x-4 shadow-inner hover:shadow-neon-orange transition-all duration-300 cursor-pointer"
-              >
-                <div className="relative w-20 h-20 rounded-lg overflow-hidden border border-slate-200 shrink-0 shadow-sm bg-slate-100 flex items-center justify-center">
-                  <img src="/brochure.jpg" alt="IronFlow Brochure Preview" className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105" />
-                  <div className="absolute inset-0 bg-slate-950/20 group-hover:bg-slate-950/0 transition-colors duration-300" />
-                  <div className="absolute bottom-1 right-1 bg-slate-950/75 text-white px-1 py-0.5 rounded text-[8px] font-mono tracking-widest uppercase">HD</div>
-                </div>
-                <div className="font-sans flex-1 min-w-0">
-                  <span className="text-[10px] font-mono text-safety-orange font-bold uppercase tracking-wider block">Marketing Material</span>
-                  <span className="text-sm font-display font-extrabold text-slate-primary block truncate mt-0.5 group-hover:text-safety-orange transition-colors">Official Product Brochure</span>
-                  <span className="text-[11px] text-slate-secondary block mt-1 leading-normal">Interactive preview of IronFlow capabilities, workflows, and specifications.</span>
-                  <span className="inline-flex items-center text-[10px] font-mono font-bold text-electric group-hover:text-safety-orange transition-colors mt-2">
-                    <span>EXPLORE FULLSCREEN</span>
-                    <svg className="w-3.5 h-3.5 ml-1 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                  </span>
-                </div>
-              </div>
-
-              {/* Official Brochure Contact Details */}
+              {/* Contact Details */}
               <div className="border-t border-slate-100 pt-6 space-y-4 text-xs font-mono">
                 <div className="flex items-center space-x-3 text-slate-secondary hover:text-electric transition-colors">
                   <div className="bg-blue-50 text-electric border border-blue-100 p-2 rounded shadow-sm">
@@ -1595,146 +1664,112 @@ export default function LandingPage() {
       </section>
 
       {/* ============================================================================
-          FOOTER / SRE COMPLIANCE BADGES
+          FOOTER
           ============================================================================ */}
-      <footer className="border-t border-slate-200 bg-white py-12">
+      <footer className="border-t border-slate-200 bg-slate-50 pt-16 pb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8 font-sans text-xs text-slate-secondary">
-            
-            <div className="flex flex-col items-center md:items-start space-y-2">
-              <div className="flex items-center space-x-2">
+
+          {/* Top footer grid */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-12">
+
+            {/* Brand & contact column */}
+            <div className="md:col-span-5 space-y-5">
+              <div className="flex items-center space-x-3">
                 <Icons.Logo />
                 <div className="flex flex-col">
-                  <span className="font-display font-bold text-base tracking-tight text-slate-primary">IronFlow Software</span>
-                  <span className="text-[10px] font-sans tracking-widest text-safety-orange font-bold uppercase -mt-0.5">Keep Everything Running.</span>
+                  <span className="font-display font-bold text-lg tracking-tight text-slate-primary">IronFlow Software</span>
+                  <span className="text-[10px] font-mono tracking-widest text-safety-orange font-bold uppercase -mt-0.5">Keep Everything Running.</span>
                 </div>
               </div>
-              <p className="text-slate-muted text-center md:text-left mt-1">
-                © {new Date().getFullYear()} IronFlow Software. All rights reserved. Deployed via Edge Core Node.
+              <p className="text-slate-secondary text-sm leading-relaxed max-w-sm">
+                The complete CMMS platform built for industrial teams. Prevent equipment failures, automate preventive maintenance, and keep every record audit-ready.
               </p>
+              <div className="space-y-2.5 pt-1">
+                <a href="tel:713-298-4529" className="flex items-center space-x-2.5 text-xs font-mono text-slate-secondary hover:text-electric transition-colors group">
+                  <div className="bg-white border border-slate-200 p-1.5 rounded shadow-sm group-hover:border-electric/30 transition-colors">
+                    <Icons.Phone className="w-3.5 h-3.5" />
+                  </div>
+                  <span>713-298-4529</span>
+                </a>
+                <a href="mailto:info@ironflowsoftware.com" className="flex items-center space-x-2.5 text-xs font-mono text-slate-secondary hover:text-electric transition-colors group">
+                  <div className="bg-white border border-slate-200 p-1.5 rounded shadow-sm group-hover:border-electric/30 transition-colors">
+                    <Icons.Mail className="w-3.5 h-3.5" />
+                  </div>
+                  <span>info@ironflowsoftware.com</span>
+                </a>
+                <a href="https://www.ironflowsoftware.com" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2.5 text-xs font-mono text-slate-secondary hover:text-electric transition-colors group">
+                  <div className="bg-white border border-slate-200 p-1.5 rounded shadow-sm group-hover:border-electric/30 transition-colors">
+                    <Icons.Globe className="w-3.5 h-3.5" />
+                  </div>
+                  <span>www.ironflowsoftware.com</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Platform links */}
+            <div className="md:col-span-3 space-y-4">
+              <h4 className="text-xs font-mono font-bold text-slate-primary uppercase tracking-widest">Platform</h4>
+              <ul className="space-y-2.5">
+                {[
+                  { label: 'System Capabilities', href: '#features' },
+                  { label: 'Interactive Playground', href: '#playground' },
+                  { label: 'Edge Sync & Specs', href: '#specs' },
+                  { label: 'API Console', href: '#api' },
+                  { label: 'Industrial Teams', href: '#team' },
+                ].map((link) => (
+                  <li key={link.href}>
+                    <a href={link.href} className="text-xs text-slate-secondary hover:text-electric transition-colors font-sans">
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Company links */}
+            <div className="md:col-span-4 space-y-4">
+              <h4 className="text-xs font-mono font-bold text-slate-primary uppercase tracking-widest">Get Started</h4>
+              <ul className="space-y-2.5">
+                {[
+                  { label: 'Request a Live Demo', href: '#demo' },
+                  { label: 'Contact Sales', href: 'mailto:info@ironflowsoftware.com' },
+                  { label: 'ironflowsoftware.com', href: 'https://www.ironflowsoftware.com' },
+                ].map((link) => (
+                  <li key={link.label}>
+                    <a href={link.href} className="text-xs text-slate-secondary hover:text-electric transition-colors font-sans">
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              {/* Compliance badges */}
+              <div className="pt-4 flex flex-wrap gap-2">
+                {['ATEX Zone 1 & 2', 'TLS 1.3 / AES-256', 'Tri-Region Cloud'].map((badge) => (
+                  <span key={badge} className="bg-white border border-slate-200 text-slate-secondary font-mono text-[9px] px-2.5 py-1 rounded shadow-sm uppercase tracking-wider">
+                    {badge}
+                  </span>
+                ))}
+              </div>
             </div>
 
           </div>
+
+          {/* Bottom bar */}
+          <div className="border-t border-slate-200 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-muted font-mono">
+            <p>© {new Date().getFullYear()} IronFlow Software. All rights reserved.</p>
+            <div className="flex items-center space-x-4">
+              <span className="flex items-center space-x-1.5">
+                <span className="inline-block w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
+                <span>Systems Operational</span>
+              </span>
+              <span className="text-slate-300 hidden sm:inline">|</span>
+              <span className="hidden sm:inline">Deployed via Edge Core Node</span>
+            </div>
+          </div>
+
         </div>
       </footer>
 
-      {/* ============================================================================
-          INTERACTIVE MARKETING BROCHURE LIGHTBOX MODAL (Premium Fullscreen View)
-          ============================================================================ */}
-      <AnimatePresence>
-        {isBrochureOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md overflow-y-auto animate-fade-in"
-            role="dialog"
-            aria-modal="true"
-            onClick={() => setIsBrochureOpen(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="relative bg-white border border-slate-200 rounded-2xl shadow-cyber-card max-w-5xl w-full overflow-hidden flex flex-col md:flex-row my-8"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Close Button Top Right (Mobile & Desktop overlay) */}
-              <button
-                onClick={() => setIsBrochureOpen(false)}
-                className="absolute top-4 right-4 z-10 bg-slate-900/80 hover:bg-slate-900 text-white rounded-full p-2.5 transition-colors shadow-lg hover:scale-105 active:scale-95"
-                aria-label="Close modal"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-
-              {/* Left Column: High-Res Brochure Display */}
-              <div className="flex-1 bg-slate-100 p-4 md:p-8 flex items-center justify-center relative overflow-hidden group select-none min-h-[350px] md:min-h-[500px]">
-                <div className="absolute inset-0 bg-grid-pattern bg-[size:20px_20px] opacity-20" />
-                
-                {/* Real High Definition Image */}
-                <motion.div 
-                  className="relative max-h-[80vh] rounded-lg shadow-2xl overflow-hidden border border-slate-200"
-                  whileHover={{ scale: 1.01 }}
-                >
-                  <img
-                    src="/brochure.jpg"
-                    alt="IronFlow Software Official Marketing Brochure"
-                    className="w-full h-full object-contain object-center pointer-events-none"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent pointer-events-none" />
-                </motion.div>
-              </div>
-
-              {/* Right Column: Premium Flyer Control Panel */}
-              <div className="w-full md:w-[320px] bg-slate-950 text-slate-100 p-6 md:p-8 flex flex-col justify-between border-t md:border-t-0 md:border-l border-slate-800 shrink-0 font-sans">
-                <div className="space-y-6">
-                  {/* Header & Logo */}
-                  <div className="flex items-center space-x-2 border-b border-slate-900 pb-4">
-                    <Icons.Logo />
-                    <div className="flex flex-col">
-                      <span className="font-display font-extrabold text-lg tracking-tight text-white">IronFlow</span>
-                      <span className="text-[8px] font-mono tracking-widest text-safety-orange font-bold uppercase -mt-0.5">Marketing Brochure</span>
-                    </div>
-                  </div>
-
-                  {/* Information Details */}
-                  <div className="space-y-4">
-                    <div>
-                      <h4 className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-widest">Document Title</h4>
-                      <p className="text-sm font-semibold text-white mt-1">Official Product Overview Flyer</p>
-                    </div>
-                    
-                    <div>
-                      <h4 className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-widest">Target Industry</h4>
-                      <p className="text-sm font-semibold text-white mt-1">Industrial, Field Service & Energy Sectors</p>
-                    </div>
-
-                    <div>
-                      <h4 className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-widest">Key Core Features</h4>
-                      <div className="mt-2.5 flex flex-wrap gap-1.5">
-                        {['Hierarchy', 'Barcoding', 'Schedules', 'Compliance', 'Offline WAL', 'gRPC'].map((tag) => (
-                          <span key={tag} className="bg-slate-900 border border-slate-800 text-slate-300 font-mono text-[9px] px-2 py-0.5 rounded">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="bg-slate-900/60 border border-slate-800 rounded-lg p-3.5 text-[11px] leading-relaxed text-slate-400 font-sans">
-                      This official marketing brochure describes the complete capabilities of the <strong className="text-white">IronFlow CMMS Suite</strong>, designed for mission-critical operations requiring extreme reliability and offline-first database resilience.
-                    </div>
-                  </div>
-                </div>
-
-                {/* Footer and Downloads */}
-                <div className="space-y-4 mt-8 md:mt-0">
-                  <a
-                    href="/brochure.jpg"
-                    download="IronFlow_Software_Brochure.jpg"
-                    className="w-full bg-gradient-to-r from-safety-orange to-orange-600 hover:opacity-95 text-white px-5 py-3 rounded-lg text-xs font-display font-bold tracking-wider transition-all duration-300 shadow-neon-orange flex items-center justify-center space-x-2 active:scale-[0.98]"
-                  >
-                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                    </svg>
-                    <span>DOWNLOAD HIGH-RES</span>
-                  </a>
-
-                  <button
-                    onClick={() => setIsBrochureOpen(false)}
-                    className="w-full border border-slate-800 bg-transparent hover:border-slate-700 text-slate-400 hover:text-white px-5 py-3 rounded-lg text-xs font-display font-bold transition-all duration-300 text-center uppercase tracking-wider block"
-                  >
-                    Return to Site
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
     </div>
   );
